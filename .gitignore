@@ -41,3 +41,4 @@ back-end/.flattened-pom.xml
 back-end/secrets.yml
 back-end/.gradletasknamecache
 back-end/.sts4-cache
+back-end/src/main/resources/application.properties
