@@ -34,14 +34,14 @@ public class UserService {
 	
 	public Message delete(String externalId) throws EntityNotFoundException {
 		User user = userRepository.findOneByExternalId(externalId).orElseThrow(() ->
-			new EntityNotFoundException("User não encontrado", "database.user.notfound"));
+			new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
 		userRepository.delete(user);
 		return new Message("Usuário deletado com sucesso", "user.delete.success");
 	}
 
 	public User update(String externalId, User userToUpdate)  throws EntityNotFoundException{
 		User user = userRepository.findOneByExternalId(externalId).orElseThrow(() ->
-		new EntityNotFoundException("User não encontrado", "database.user.notfound"));
+		new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
 		
 		if(!user.getEmail().equals(userToUpdate.getEmail()))
 			user.setEmail(userToUpdate.getExternalId());
@@ -55,7 +55,7 @@ public class UserService {
 
 	public User findOne(String externalId) throws EntityNotFoundException {
 		User user = userRepository.findOneByExternalId(externalId).orElseThrow(() ->
-			new EntityNotFoundException("User não encontrado", "database.user.notfound"));
+			new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
 		return user;
 	}
 	
