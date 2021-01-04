@@ -3,10 +3,11 @@ package br.ufc.dc.validc.service;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+
 import org.springframework.data.domain.Page;
 
 import br.ufc.dc.validc.exception.EntityNotFoundException;
@@ -15,12 +16,14 @@ import br.ufc.dc.validc.model.User;
 import br.ufc.dc.validc.repository.UserRepository;
 
 @Service
-public class UserService {
+public class UserService {//implements UserDetailsService {
 
 	
 	@Autowired
 	private UserRepository userRepository;
-	
+
+
+
 	public User saveOrUpdate(User user) {
 		user.generateExternalId();
 		
@@ -58,6 +61,37 @@ public class UserService {
 			new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
 		return user;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((userRepository == null) ? 0 : userRepository.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserService other = (UserService) obj;
+		if (userRepository == null) {
+			if (other.userRepository != null)
+				return false;
+		} else if (!userRepository.equals(other.userRepository))
+			return false;
+		return true;
+	}
+
+
+
+	
+
+	
 	
 
 }

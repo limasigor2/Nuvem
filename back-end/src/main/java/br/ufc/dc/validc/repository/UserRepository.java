@@ -14,6 +14,8 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	Page<User> findAll(Pageable pageable);
 	User deleteByExternalId(String externalId);
 	Optional<User> findOneByExternalId(String externalId);
-
+	Optional<User> findByUsername(String username);
+	Boolean existsByUsername(String username);
+	Boolean existsByEmail(String email);
 
 }

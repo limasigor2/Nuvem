@@ -1,5 +1,6 @@
 package br.ufc.dc.validc.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.ufc.dc.validc.exception.EntityNotFoundException;
 import br.ufc.dc.validc.model.User;
 import br.ufc.dc.validc.service.UserService;
+
 
 @RestController
 @RequestMapping("/user")
@@ -49,5 +51,6 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(service.findOne(externalId));
 	}
 
+	
 
 }
