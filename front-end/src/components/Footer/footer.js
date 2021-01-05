@@ -1,10 +1,11 @@
-import { Divider } from 'antd';
 import React from 'react';
 
-export default function Footer () {
+import './footer.scss';
+
+export default function Footer() {
     return (
-        <div>
-            footer aqui
+        <div className="footer-content padding-page">
+            <p>Criado por Bruna Neves e Igor Lima | 2021 - Versão 1.0</p>
         </div>
     )
 }

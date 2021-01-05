@@ -10,7 +10,7 @@ import './styles/global.scss';
 
 function App() {
   return (
-    <div className="App">
+    <div className="app-container">
       <Router history={history}>
         <Header />
         <Routes />
