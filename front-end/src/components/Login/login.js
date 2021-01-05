@@ -9,7 +9,7 @@ const Login = () => {
     };
 
     return (
-        <div className="login-content">
+        <div className="login-content content-align-center form-container">
             <Form
                 name="basic"
                 onFinish={onFinish}
@@ -17,7 +17,7 @@ const Login = () => {
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[{ required: true, message: 'Por favor digite seu nome' }]}
+                    rules={[{ required: true, message: 'Por favor digite seu email' }]}
                 >
                     <Input />
                 </Form.Item>
