@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import Login from '../components/Login/login';
 import Register from '../components/Register/register';
+import DocumentValidation from '../components/DocumentValidation/documentValidation';
 
 export default function Routes() {
     return (
@@ -12,6 +13,9 @@ export default function Routes() {
             </Route>
             <Route exact path='/register'>
                 <Register />
+            </Route>
+            <Route exact path='/document/validation'>
+                <DocumentValidation />
             </Route>
         </Switch>
     )
