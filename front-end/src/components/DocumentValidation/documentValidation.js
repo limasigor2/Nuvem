@@ -28,7 +28,7 @@ const DocumentValidation = () => {
     };
 
     return (
-        <div className="register-content content-align-center form-container">
+        <div className="document-validation-content content-align-center form-container">
             <Form
                 name="basic"
                 onFinish={onFinish}

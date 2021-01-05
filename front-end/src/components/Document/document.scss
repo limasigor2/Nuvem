@@ -1,0 +1,19 @@
+.document-container{
+    .document-file{
+        transition: .5s;
+        border-top: 1px solid #ccc;
+        text-align: center;
+        .file {
+            height: 100%;
+            width: 100%;
+        }
+        img {
+            padding: 5px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+    }
+    .typePdf{
+        height: 50vh;
+    }
+}
