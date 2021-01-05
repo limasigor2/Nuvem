@@ -3,34 +3,33 @@ import { Form, Input, Button } from 'antd';
 
 const Login = () => {
     const onFinish = (values) => {
-        console.log('Success:', values);
+        console.log(values);
     };
 
     return (
         <Form
             name="basic"
-            initialValues={{ remember: true }}
             onFinish={onFinish}
         >
             <Form.Item
-                label="Username"
-                name="username"
-                rules={[{ required: true, message: 'Please input your username!' }]}
+                label="Email"
+                name="email"
+                rules={[{ required: true, message: 'Por favor digite seu nome' }]}
             >
                 <Input />
             </Form.Item>
 
             <Form.Item
-                label="Password"
+                label="Senha"
                 name="password"
-                rules={[{ required: true, message: 'Please input your password!' }]}
+                rules={[{ required: true, message: 'Por favor digite sua senha' }]}
             >
                 <Input.Password />
             </Form.Item>
 
             <Form.Item>
                 <Button type="primary" htmlType="submit">
-                    Submit
+                    Enviar
         </Button>
             </Form.Item>
         </Form>
