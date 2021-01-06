@@ -14,7 +14,7 @@ const FileManager = () => {
     return (
         <div className={`file-manager-container`} >
             <div className="page-header padding-page">
-                    <h1>Gerenciador de Arquivos</h1>
+                    <h2>Gerenciador de Arquivos</h2>
                     <Button shape="circle" icon={<PlusOutlined />} />
                 </div>
             <div className={showHistoric ? 'with-historic' : ''}>

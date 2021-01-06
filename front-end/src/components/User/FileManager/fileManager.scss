@@ -1,18 +1,25 @@
 .file-manager-container{
-    min-height: 79vh;
+    min-height: 82vh;
     .page-header{
         border-bottom: 1px solid #ccc;
-        padding-bottom: 20px;
-        h1{
+        padding-top: 15px;
+        padding-bottom: 15px;
+        h2{
             margin: 0;
         }
         display: flex;
         justify-content: space-between;
         align-items: center;
+        button{
+            height: 40px;
+            width: 40px;
+            span{
+                font-size: 18px;
+            }
+        }
     }
     .card-list{
-        padding:0 70px;
-        padding-top: 30px;
+        padding:30px 70px;
         width: 80%;
         margin: auto;
     }
