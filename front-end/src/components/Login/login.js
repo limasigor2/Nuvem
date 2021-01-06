@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
+import { Link } from 'react-router-dom';
 
 import './login.scss';
 
@@ -9,32 +10,34 @@ const Login = () => {
     };
 
     return (
-        <div className="login-content content-align-center form-container">
+        <div className="login-container content-align-center form-container">
             <Form
                 name="basic"
                 onFinish={onFinish}
             >
                 <Form.Item
-                    label="Email"
                     name="email"
                     rules={[{ required: true, message: 'Por favor digite seu email' }]}
                 >
-                    <Input />
+                    <Input placeholder="Email"/>
                 </Form.Item>
 
                 <Form.Item
-                    label="Senha"
                     name="password"
                     rules={[{ required: true, message: 'Por favor digite sua senha' }]}
                 >
-                    <Input.Password />
+                    <Input.Password placeholder="Senha"/>
                 </Form.Item>
-
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Enviar
+                <div className="inline">
+                    <Link to="/register">
+                       Crie sua conta
+                    </Link>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            Enviar
         </Button>
-                </Form.Item>
+                    </Form.Item>
+                </div>
             </Form>
         </div>
     )

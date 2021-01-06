@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { PaperClipOutlined } from '@ant-design/icons';
 
 const { Dragger } = Upload;
 
@@ -34,7 +34,7 @@ const DocumentValidation = () => {
                 onFinish={onFinish}
                 layout={'vertical'}
             >
-                <h1>Validação de arquivo</h1>
+                <h1>Valide um arquivo</h1>
                 <Form.Item
                     label="Código"
                     name="code"
@@ -50,7 +50,7 @@ const DocumentValidation = () => {
                 >
                     <Dragger {...uploadFile} fileList={defaultFileList} disabled={disabled}>
                         <p className="ant-upload-drag-icon">
-                            <UploadOutlined />
+                            <PaperClipOutlined />
                         </p>
                         <p className="ant-upload-text">Click ou arraste o arquivo para adicioná-lo</p>
                         <p className="ant-upload-hint">

@@ -27,8 +27,17 @@
     form{
         width: 35%;
         border: 1px solid #ccc;
-        padding: 45px 25px 10px;
+        padding: 45px 25px 50px;
         border-radius: 20px;
         box-sizing: border-box;
+    }
+}
+
+.inline{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    div{
+        margin: 0;
     }
 }

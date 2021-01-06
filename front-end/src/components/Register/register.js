@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
+import { Link } from 'react-router-dom';
 
 import './register.scss';
 
@@ -9,13 +10,13 @@ const Register = () => {
     };
 
     return (
-        <div className="register-content content-align-center form-container">
+        <div className="register-container content-align-center form-container">
             <Form
                 name="basic"
                 onFinish={onFinish}
                 layout={'vertical'}
             >
-                <h1>Cadastre-se</h1>
+                <h1>Crie sua conta</h1>
                 <Form.Item
                     label="Nome"
                     name="name"
@@ -48,11 +49,16 @@ const Register = () => {
                     <Input.Password />
                 </Form.Item>
 
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Enviar
+                <div className="inline">
+                    <Link to="/">
+                       Entre na conta
+                    </Link>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            Enviar
         </Button>
-                </Form.Item>
+                    </Form.Item>
+                </div>
             </Form>
         </div>
     )
