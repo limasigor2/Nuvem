@@ -6,7 +6,7 @@ import Document from '../Document/document';
 
 import './card.scss';
 
-const Card = ({ code }) => {
+const Card = ({ code, historic }) => {
 
     const [file, setFile] = useState(null);
     const [type, setType] = useState('');
@@ -39,7 +39,7 @@ const Card = ({ code }) => {
                 <Button onClick={() => document()}>
                     {showDocument ? 'Ocultar Arquivo' : 'Abrir Arquivo'}
                 </Button>
-                <Button>
+                <Button onClick={() => historic()}>
                     Ver histórico
                 </Button>
             </div>
