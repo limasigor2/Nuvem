@@ -5,6 +5,7 @@ import Login from '../components/Login/login';
 import Register from '../components/Register/register';
 import DocumentValidation from '../components/DocumentValidation/documentValidation';
 import FileManager from '../components/User/FileManager/fileManager';
+import Profile from '../components/Profile/profile';
 
 export default function Routes() {
     return (
@@ -20,6 +21,9 @@ export default function Routes() {
             </Route>
             <Route exact path='/home'>
                 <FileManager />
+            </Route>
+            <Route exact path='/edit/profile'>
+                <Profile />
             </Route>
         </Switch>
     )
