@@ -1,0 +1,62 @@
+@import '~antd/dist/antd.css';
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+
+*{
+    padding: 0px;
+    margin: 0px;
+}
+.app-container{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.padding-page{ 
+    padding-right: 70px;
+    padding-left: 70px;
+}
+
+.content-align-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-container{
+    form{
+        width: 35%;
+        border: 1px solid #ccc;
+        padding: 45px 25px 50px;
+        border-radius: 20px;
+        box-sizing: border-box;
+    }
+}
+
+.inline{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    div{
+        margin: 0;
+    }
+}
+
+.page-header{
+    border-bottom: 1px solid #ccc;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    h2{
+        margin: 0;
+    }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    button{
+        height: 40px;
+        width: 40px;
+        span{
+            font-size: 18px;
+        }
+    }
+}

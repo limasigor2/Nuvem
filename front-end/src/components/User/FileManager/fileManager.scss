@@ -1,0 +1,17 @@
+.file-manager-container{
+    min-height: 82vh;    
+    .card-list{
+        padding:30px 70px;
+        width: 80%;
+        margin: auto;
+    }
+}
+
+.with-historic{
+    display: flex;
+    .card-list{
+        margin: 0;
+        width: 75%;
+        padding-right: 20px;
+    }
+}

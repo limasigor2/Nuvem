@@ -1,0 +1,14 @@
+.card-container {
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    .file{
+        border-bottom: 1px solid #ccc;
+        border-top: 1px solid #ccc;
+    }
+}
+
+.style-header-and-footer{
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+}
