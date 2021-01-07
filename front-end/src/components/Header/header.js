@@ -12,13 +12,13 @@ import './header.scss';
 
 const Header = () => {
     const {pathname} = useLocation();
-    console.log(pathname);
+
     return (
         <div className="header-content padding-page">
             <Link className="brand" to="/">
                 <div className="brand">
                     <PaperClipOutlined />
-                    <p>valiDC</p>
+                    <p>ValiDC</p>
                 </div>
             </Link>
             <Dropdown name={'fulana'} email={'fulana@gmail.com'} id={'full-ana'}/>
