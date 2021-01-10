@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import br.ufc.dc.validc.service.UserDetailsServiceImpl;
 
 
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -28,10 +27,9 @@ import br.ufc.dc.validc.service.UserDetailsServiceImpl;
 		// jsr250Enabled = true,
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
-	
+
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
 

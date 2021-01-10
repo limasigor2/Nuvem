@@ -4,9 +4,6 @@ import org.springframework.http.HttpStatus;
 
 public class EntityNotFoundException  extends ValidcException{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5361393063437297376L;
 	
 

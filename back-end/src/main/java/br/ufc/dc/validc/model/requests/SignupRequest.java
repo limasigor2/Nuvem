@@ -2,13 +2,10 @@ package br.ufc.dc.validc.model.requests;
 
 import java.util.Set;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
-
-public class SignUpRequest {
-	@NotBlank
+import javax.validation.constraints.*;
+ 
+public class SignupRequest {
+    @NotBlank
     @Size(min = 3, max = 20)
     private String username;
  

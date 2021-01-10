@@ -3,7 +3,6 @@ package br.ufc.dc.validc.model.requests;
 import javax.validation.constraints.NotBlank;
 
 public class LoginRequest {
-
 	@NotBlank
 	private String username;
 
