@@ -1,12 +1,32 @@
-import React from 'react';
-import { Form, Input, Button } from 'antd';
+import React, { useEffect } from 'react';
+import { Form, Input, Button, notification } from 'antd';
 import { Link } from 'react-router-dom';
 
 import './register.scss';
+import auth from '../../services/auth';
+import localStorage from '../../services/localStorage';
+import history from '../../utils/history';
 
 const Register = () => {
-    const onFinish = (values) => {
-        console.log(values);
+
+    useEffect(() => {
+        if (localStorage.getUser()) {
+            history.push('/home');
+        }
+    }, []);
+
+    const onFinish = async (values) => {
+        const response = await auth.register(values);
+        if (response.status === 200) {
+            notification['success']({
+                message: 'Cadastro realizado com sucesso',
+            });
+            history.push('/');
+        } else {
+            notification['error']({
+                message: response.data.message,
+            });
+        }
     };
 
     return (
@@ -20,15 +40,15 @@ const Register = () => {
                 <Form.Item
                     label="Nome"
                     name="name"
-                    rules={[{ required: true, message: 'Por favor digite seu nome' }, {min: 30, message: 'Por favor digite um nome válido'}]}
+                    rules={[{ required: true, message: 'Por favor digite seu nome' }, { min: 10, message: 'Por favor digite um nome válido' }]}
                 >
                     <Input />
                 </Form.Item>
 
                 <Form.Item
-                    label="Identificação"
+                    label="Nome de usuário"
                     name="id"
-                    rules={[{ required: true, message: 'Por favor digite seu nome de identificação' }]}
+                    rules={[{ required: true, message: 'Por favor digite seu nome de usuário' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -51,7 +71,7 @@ const Register = () => {
 
                 <div className="inline">
                     <Link to="/">
-                       Entre na conta
+                        Entre na conta
                     </Link>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">
