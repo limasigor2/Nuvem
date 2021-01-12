@@ -11,7 +11,7 @@ import br.ufc.validc.property.FileStorageProperties;
 @SpringBootApplication
 @EnableAutoConfiguration
 @EnableConfigurationProperties({
-    FileStorageProperties.class
+	FileStorageProperties.class
 })
 public class ValiDcApplication {
 
