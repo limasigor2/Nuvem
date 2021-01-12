@@ -19,6 +19,6 @@ public class ValiDcApplication {
 		SpringApplication.run(ValiDcApplication.class, args);
 	}
 	
-
+	
 
 }

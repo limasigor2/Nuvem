@@ -26,7 +26,7 @@ import br.ufc.dc.validc.model.Message;
 import br.ufc.dc.validc.model.Role;
 import br.ufc.dc.validc.model.User;
 import br.ufc.dc.validc.model.requests.LoginRequest;
-import br.ufc.dc.validc.model.requests.SignupRequest;
+import br.ufc.dc.validc.model.requests.SignUpRequest;
 import br.ufc.dc.validc.model.response.JwtResponse;
 import br.ufc.dc.validc.repository.RoleRepository;
 import br.ufc.dc.validc.repository.UserRepository;
@@ -74,7 +74,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity
 					.badRequest()
@@ -90,7 +90,8 @@ public class AuthController {
 		// Create new user's account
 		User user = new User(signUpRequest.getUsername(), 
 							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
+							 encoder.encode(signUpRequest.getPassword()),
+							 signUpRequest.getName());
 
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
@@ -108,12 +109,6 @@ public class AuthController {
 					roles.add(adminRole);
 
 					break;
-				case "mod":
-					Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(modRole);
-
-					break;
 				default:
 					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
 							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -123,6 +118,7 @@ public class AuthController {
 		}
 
 		user.setRoles(roles);
+		user.generateExternalId();
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new Message("User registered successfully!", "key"));
