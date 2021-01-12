@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button, notification } from 'antd';
 import { Link } from 'react-router-dom';
 
 import './register.scss';
 import auth from '../../services/auth';
+import localStorage from '../../services/localStorage';
 import history from '../../utils/history';
 
 const Register = () => {
+
+    useEffect(() => {
+        if (localStorage.getUser()) {
+            history.push('/home');
+        }
+    }, []);
+
     const onFinish = async (values) => {
         const response = await auth.register(values);
         if (response.status === 200) {

@@ -1,23 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button, notification } from 'antd';
 import { Link } from 'react-router-dom';
 
 import history from '../../utils/history';
 import auth from '../../services/auth';
+import localStorage from '../../services/localStorage';
 
 import './login.scss';
 
 const Login = () => {
+
+    useEffect(() => {
+        if (localStorage.getUser()) {
+            history.push('/home');
+        }
+    }, []);
+
     const onFinish = async (values) => {
         const response = await auth.login(values.id, values.password);
-        if(response.status === 200){
+        if (response.status === 200) {
             history.push('/home');
         } else {
             notification['error']({
                 message: response.data.message,
             });
         }
-        console.log(response);
     };
 
     return (
@@ -30,18 +37,18 @@ const Login = () => {
                     name="id"
                     rules={[{ required: true, message: 'Por favor digite seu nome de usuário' }]}
                 >
-                    <Input placeholder="Nome de usuário"/>
+                    <Input placeholder="Nome de usuário" />
                 </Form.Item>
 
                 <Form.Item
                     name="password"
                     rules={[{ required: true, message: 'Por favor digite sua senha' }]}
                 >
-                    <Input.Password placeholder="Senha"/>
+                    <Input.Password placeholder="Senha" />
                 </Form.Item>
                 <div className="inline">
                     <Link to="/register">
-                       Crie sua conta
+                        Crie sua conta
                     </Link>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">

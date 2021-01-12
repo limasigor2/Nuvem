@@ -1,4 +1,5 @@
 import api from './api';
+import localStorage from './localStorage';
 
 const auth = {
 
@@ -7,6 +8,7 @@ const auth = {
             const response = await api.post('/auth/signin', {
                 username: id, password: password
             });
+            if(response.status === 200) localStorage.login(response.data);
             return response;
         } catch (responseError) {
             const { response } = responseError;
