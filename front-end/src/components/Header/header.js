@@ -25,7 +25,7 @@ const Header = () => {
                 </div>
             </Link>
             {user ?
-                <Dropdown name={'fulana'} email={'fulana@gmail.com'} id={'full-ana'} />
+                <Dropdown name={user.name} email={user.email} id={user.username} />
                 :
                 <div>
                     {pathname !== '/document/validation' &&
