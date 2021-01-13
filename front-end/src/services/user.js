@@ -30,9 +30,9 @@ const user = {
         }
     },
 
-    async List(page, size) {
+    async list(page, size) {
         try {
-            const response = await api.get('/list', { params: { page: page, size: size } });
+            const response = await api.get('user/list', { params: { page: page, size: size } });
             return response;
         } catch (responseError) {
             const { response } = responseError;

@@ -1,13 +1,39 @@
-import React from 'react';
-import { Form, Input, Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Form, Input, Button, notification } from 'antd';
+
+import userService from '../../services/user';
+import localStorage from '../../services/localStorage';
 
 import './profile.scss';
-import user from '../../services/user';
 
 const Profile = () => {
+    const [form] = Form.useForm();
+
+    const [user, setUser] = useState({});
+    const { username } = localStorage.getUser();
+
+    console.log(user)
+
+    async function getUser() {
+        const response = await userService.get(username);
+        console.log(response)
+        const { data } = response;
+        if (response.status === 200) {
+            setUser(data);
+            form.setFieldsValue({ name: data.name, username: data.username, email: data.email })
+        }
+        else {
+            notification['error']({
+                message: 'Usuário não autorizado',
+            });
+            localStorage.logout();
+        }
+    };
+
+    useEffect(() => { getUser(); }, [])
 
     const onFinish = async (values) => {
-        const response = await user.put(values);
+        const response = await userService.put(values);
         console.log(response);
         console.log(values);
     };
@@ -15,6 +41,7 @@ const Profile = () => {
     return (
         <div className="profile-container content-align-center form-container">
             <Form
+                form={form}
                 name="basic"
                 onFinish={onFinish}
                 layout={'vertical'}
@@ -29,7 +56,7 @@ const Profile = () => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Identificação"
+                    label="Nome de usuário"
                     name="username"
                     rules={[{ required: true, message: 'Por favor digite seu nome de identificação' }]}
                 >
