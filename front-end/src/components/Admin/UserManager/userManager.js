@@ -31,12 +31,12 @@ const columns = [
 
 const UserManager = () => {
 
-    async function fetchData(size, page) {
-        const response = await user.list(size, page);
-        console.log(response);
-    }
+    // async function fetchData(size, page) {
+    //     const response = await user.list(size, page);
+    //     console.log(response);
+    // }
 
-    useEffect(() => { fetchData(5, 1) }, []);
+    // useEffect(() => { fetchData(5, 1) }, []);
 
     const [data, setData] = useState([{
         key: '1',

@@ -22,14 +22,12 @@ const Header = () => {
         console.log(response);
     }
 
-    console.log(user);
-
-    useEffect(() => { if (!user) 
-        localStorage.logout();
-        else {
-            getUser(user.username);
-        }
-     }, []);
+    // useEffect(() => { if (!user) 
+    //     localStorage.logout();
+    //     else {
+    //         // getUser(user.username);
+    //     }
+    //  }, []);
 
     return (
         <div className="header-content padding-page">

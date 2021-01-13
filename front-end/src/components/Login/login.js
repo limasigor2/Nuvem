@@ -11,17 +11,13 @@ import './login.scss';
 const Login = () => {
 
     useEffect(() => {
-        if (localStorage.getUser()) {
-            history.push('/home');
-        }
+        if (localStorage.getUser()) history.push('/home');
     }, []);
 
     const onFinish = async (values) => {
         const response = await auth.login(values.id, values.password);
         if (response.status === 200) {
-            if (localStorage.getUser()) {
-                history.push('/home');
-            }
+            history.push('/home');
         } else {
             notification['error']({
                 message: response.data.message,
