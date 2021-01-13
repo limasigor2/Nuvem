@@ -19,7 +19,9 @@ const Login = () => {
     const onFinish = async (values) => {
         const response = await auth.login(values.id, values.password);
         if (response.status === 200) {
-            history.push('/home');
+            if (localStorage.getUser()) {
+                history.push('/home');
+            }
         } else {
             notification['error']({
                 message: response.data.message,

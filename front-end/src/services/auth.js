@@ -5,7 +5,7 @@ const auth = {
 
     async login(id, password) {
         try {
-            const response = await api.post('/auth/signin', {
+            const response = await api.post('api/auth/signin', {
                 username: id, password: password
             });
             if(response.status === 200) localStorage.login(response.data);
@@ -18,13 +18,13 @@ const auth = {
 
     async register(values) {
         try {
-            const response = await api.post('/auth/signup', { username: values.id, name: values.name, email: values.email, password: values.password });
+            const response = await api.post('api/auth/signup', { username: values.id, name: values.name, email: values.email, password: values.password });
             return response;
         } catch (responseError) {
             const { response } = responseError
             return response;
         }
-    }
+    },
 };
 
 export default auth;

@@ -8,10 +8,16 @@ const api = axios.create({
     }
 });
 
-api.interceptors.request.use( async (config) => {
+api.interceptors.request.use(async (config) => {
     const auth = localStorage.getItem('VALIDC');
-    if(auth){
-        console.log(auth);
+    if (auth) {
+        if (auth) {
+            const { accessToken } = JSON.parse(auth);
+            const tmpConfig = config;
+            if (accessToken) {
+              tmpConfig.headers.Authorization = accessToken;
+            }
+          }
     }
     return config;
 });

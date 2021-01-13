@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from 'antd';
 import { ArrowRightOutlined, PaperClipOutlined } from '@ant-design/icons';
 
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom'
 import history from '../../utils/history';
 import localStorage from '../../services/localStorage';
+import userService from '../../services/user';
 
 import './header.scss';
 
@@ -15,6 +16,20 @@ const Header = () => {
     const { pathname } = useLocation();
 
     const user = localStorage.getUser();
+
+    async function getUser(id){
+        const response = await userService.get(id);
+        console.log(response);
+    }
+
+    console.log(user);
+
+    useEffect(() => { if (!user) 
+        localStorage.logout();
+        else {
+            getUser(user.username);
+        }
+     }, []);
 
     return (
         <div className="header-content padding-page">

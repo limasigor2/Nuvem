@@ -2,9 +2,13 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 
 import './profile.scss';
+import user from '../../services/user';
 
 const Profile = () => {
-    const onFinish = (values) => {
+
+    const onFinish = async (values) => {
+        const response = await user.put(values);
+        console.log(response);
         console.log(values);
     };
 
@@ -19,14 +23,14 @@ const Profile = () => {
                 <Form.Item
                     label="Nome"
                     name="name"
-                    rules={[{ required: true, message: 'Por favor digite seu nome' }, { min: 30, message: 'Por favor digite um nome válido' }]}
+                    rules={[{ required: true, message: 'Por favor digite seu nome' }, { min: 8, message: 'Por favor digite um nome válido' }]}
                 >
                     <Input />
                 </Form.Item>
 
                 <Form.Item
                     label="Identificação"
-                    name="id"
+                    name="username"
                     rules={[{ required: true, message: 'Por favor digite seu nome de identificação' }]}
                 >
                     <Input />
