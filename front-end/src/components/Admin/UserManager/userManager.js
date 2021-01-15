@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Table, Space } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import history from '../../../utils/history';
 
 import './userManager.scss';
+import user from '../../../services/user';
 
 const columns = [
     {
@@ -29,6 +30,14 @@ const columns = [
 
 
 const UserManager = () => {
+
+    async function fetchData(size, page) {
+        const response = await user.list(size, page);
+        console.log(response);
+    }
+
+    useEffect(() => { fetchData(5, 1) }, []);
+
     const [data, setData] = useState([{
         key: '1',
         name: 'John Brown',

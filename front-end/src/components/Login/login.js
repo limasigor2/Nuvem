@@ -11,9 +11,7 @@ import './login.scss';
 const Login = () => {
 
     useEffect(() => {
-        if (localStorage.getUser()) {
-            history.push('/home');
-        }
+        if (localStorage.getUser()) history.push('/home');
     }, []);
 
     const onFinish = async (values) => {

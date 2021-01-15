@@ -11,30 +11,36 @@ import UserManager from '../components/Admin/UserManager/userManager';
 import UserRegistration from '../components/Admin/UserRegistration/userRegistration';
 
 import localStorage from '../services/localStorage';
+import rolesPath from '../utils/roles';
 
-const rolesUser = localStorage.getRoles();
-
-const grantAccess = (rolesPath) => {
+const grantAccess = (rolesUser) => {
     const array = [];
     rolesPath.forEach((rolePath) => {
         rolesUser.forEach((roleUser) => {
-            if (rolePath.includes(roleUser)) {
-                array.push(rolePath);
+            if (rolePath.role === roleUser) {
+                array.push(rolePath.path);
             }
         });
     });
-    if (array.length > 0) return true;
+    return array;
 }
 
 const PrivateRoute = ({ component: Component, roles, ...rest }) => (
-    <Route {...rest} render={(props) => {
-        if (rolesUser && grantAccess(roles)) {
-            return (
-                <Component {...props} />
-            )
+    <Route {...rest}
+        render={props => {
+            if (localStorage.getUser()) {
+                let allowedRoutes = grantAccess(localStorage.getRoles());
+                if (allowedRoutes.includes(rest.location.pathname)) {
+                    return (< Component {...props} />);
+                } else if (allowedRoutes.length > 0) {
+                    return <Redirect to={{ pathname: allowedRoutes[0], state: { from: props.location } }} />
+                } else if (allowedRoutes.length === 0)
+                    localStorage.logout();
+            }
+            return <Redirect to={{ pathname: "/", state: { from: props.location } }} />
         }
-        return <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-    }} />
+        }
+    />
 )
 
 export default function Routes() {
@@ -43,11 +49,11 @@ export default function Routes() {
             <Route exact path='/' component={Login} />
             <Route exact path='/register' component={Register} />
             <Route exact path='/document/validation' component={DocumentValidation} />
-            <PrivateRoute exact path='/home' roles={['ROLE_USER']} component={FileManager} />
-            <PrivateRoute exact path='/edit/profile' roles={['ROLE_USER']} component={Profile} />
-            <PrivateRoute exact path='/document' roles={['ROLE_USER']} component={AddFile} />
-            <PrivateRoute exact path='/admin' roles={['ROLE_ADMIN']} component={UserManager} />
-            <PrivateRoute exact path='/admin/user' roles={['ROLE_ADMIN']} component={UserRegistration} />
+            <PrivateRoute exact path='/home' component={FileManager} />
+            <PrivateRoute exact path='/edit/profile' component={Profile} />
+            <PrivateRoute exact path='/document' component={AddFile} />
+            <PrivateRoute exact path='/admin' component={UserManager} />
+            <PrivateRoute exact path='/admin/user' component={UserRegistration} />
             <Route component={Login} />
         </Switch>
     )

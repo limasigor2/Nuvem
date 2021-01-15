@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, notification } from 'antd';
 import { ArrowRightOutlined, PaperClipOutlined } from '@ant-design/icons';
 
 import Dropdown from '../Dropdown/dropdown';
@@ -8,13 +8,33 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom'
 import history from '../../utils/history';
 import localStorage from '../../services/localStorage';
+import userService from '../../services/user';
 
 import './header.scss';
 
 const Header = () => {
+    const [user, setUser] = useState(null)
     const { pathname } = useLocation();
+    const userLocal = localStorage.getUser();
 
-    const user = localStorage.getUser();
+    async function getUser(username) {
+        const response = await userService.get(username);
+        if (response.status === 200) setUser(response.data);
+        else {
+            notification['error']({
+                message: 'Usuário não autorizado',
+            });
+            localStorage.logout();
+        }
+    };
+
+    useEffect(() => {
+        if (userLocal)
+            getUser(userLocal.username);
+        else {
+            localStorage.logout();
+        }
+    }, []);
 
     return (
         <div className="header-content padding-page">

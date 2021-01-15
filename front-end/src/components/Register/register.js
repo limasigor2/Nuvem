@@ -40,7 +40,7 @@ const Register = () => {
                 <Form.Item
                     label="Nome"
                     name="name"
-                    rules={[{ required: true, message: 'Por favor digite seu nome' }, { min: 10, message: 'Por favor digite um nome válido' }]}
+                    rules={[{ required: true, message: 'Por favor digite seu nome' }, { min: 7, message: 'Por favor digite um nome válido' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -56,7 +56,7 @@ const Register = () => {
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[{ required: true, message: 'Por favor digite seu email' }]}
+                    rules={[{ required: true, message: 'Por favor digite seu email' }, { type: 'email', message: 'Por favor digite um email válido'}]}
                 >
                     <Input />
                 </Form.Item>

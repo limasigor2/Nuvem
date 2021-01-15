@@ -1,4 +1,4 @@
-import api from './api';
+import history from '../utils/history';
 
 const AUTH = 'VALIDC';
 
@@ -17,7 +17,17 @@ const storage = {
             const { roles } = JSON.parse(localStorage.getItem(AUTH));
             return roles;
         }
-    }
+    },
+    getToken() {
+        if (localStorage.getItem(AUTH)) {
+            const { accessToken } = JSON.parse(localStorage.getItem(AUTH));
+            return accessToken;
+        }
+    },
+    logout(){
+        localStorage.removeItem(AUTH);
+        history.push('/');
+    },
 }
 
 export default storage;
