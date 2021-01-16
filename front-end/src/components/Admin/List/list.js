@@ -3,10 +3,10 @@ import { Button, Table, Space } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import history from '../../../utils/history';
 
-import './userManager.scss';
+import './list.scss';
 import user from '../../../services/user';
 
-const UserManager = () => {
+const List = () => {
 
     async function fetchData(size, page) {
         const response = await user.list(size, page);
@@ -21,7 +21,6 @@ const UserManager = () => {
     useEffect(() => { fetchData(0, 10) }, []);
 
     const [data, setData] = useState(null);
-
 
     const columns = [
         {
@@ -45,7 +44,7 @@ const UserManager = () => {
                 <Space size="middle">
                     <Button shape="circle" icon={<EditOutlined />} style={{ marginRight: '15px' }} onClick={() => history.push(
                         {
-                            pathname: 'admin/user',
+                            pathname: 'admin/user/edit',
                             state: { user: record }
                         })} />
                     <Button shape="circle" icon={<DeleteOutlined />} onClick={() => deleteUser(record.externalId)} />
@@ -58,7 +57,7 @@ const UserManager = () => {
         <div className='user-manager-container' >
             <div className="page-header padding-page">
                 <h2>Gerenciador de Usuários</h2>
-                <Button shape="circle" icon={<PlusOutlined />} onClick={() => history.push('admin/user')} />
+                <Button shape="circle" icon={<PlusOutlined />} onClick={() => history.push('/admin/user/register')} />
             </div>
             <div className="table-container padding-page">
                 <Table columns={columns} dataSource={data} />
@@ -67,4 +66,4 @@ const UserManager = () => {
     )
 };
 
-export default UserManager;
+export default List;

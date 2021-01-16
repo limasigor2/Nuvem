@@ -13,7 +13,10 @@ const rolesPath = [
         path: "/admin",
         role: "ROLE_ADMIN"
     },{
-        path: "/admin/user",
+        path: "/admin/user/edit",
+        role: "ROLE_ADMIN"
+    },{
+        path: "/admin/user/register",
         role: "ROLE_ADMIN"
     },
 ];

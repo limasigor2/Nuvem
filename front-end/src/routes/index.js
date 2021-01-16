@@ -7,8 +7,9 @@ import DocumentValidation from '../components/DocumentValidation/documentValidat
 import FileManager from '../components/User/FileManager/fileManager';
 import Profile from '../components/Profile/profile';
 import AddFile from '../components/User/AddFile/addFile';
-import UserManager from '../components/Admin/UserManager/userManager';
-import UserRegistration from '../components/Admin/UserRegistration/userRegistration';
+import UserManager from '../components/Admin/List/list';
+import UserRegistration from '../components/Admin/Register/register';
+import UserEdition from '../components/Admin/Edit/edit';
 
 import localStorage from '../services/localStorage';
 import rolesPath from '../utils/roles';
@@ -53,7 +54,8 @@ export default function Routes() {
             <PrivateRoute exact path='/edit/profile' component={Profile} />
             <PrivateRoute exact path='/document' component={AddFile} />
             <PrivateRoute exact path='/admin' component={UserManager} />
-            <PrivateRoute exact path='/admin/user' component={UserRegistration} />
+            <PrivateRoute exact path='/admin/user/edit' component={UserEdition} />
+            <PrivateRoute exact path='/admin/user/register' component={UserRegistration} />
             <Route component={Login} />
         </Switch>
     )

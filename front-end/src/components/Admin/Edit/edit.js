@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import history from '../../../utils/history';
 import userService from '../../../services/user';
 
-const UserRegistration = () => {
+const Edit = () => {
     const [form] = Form.useForm();
 
     const [user, setUser] = useState(null);
@@ -95,4 +95,4 @@ const UserRegistration = () => {
     )
 }
 
-export default UserRegistration;
+export default Edit;
