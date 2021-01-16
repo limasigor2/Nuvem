@@ -43,7 +43,11 @@ const UserManager = () => {
             key: 'action',
             render: (record) => (
                 <Space size="middle">
-                    <Button shape="circle" icon={<EditOutlined />} style={{ marginRight: '15px' }} onClick={() => history.push('admin/user')} />
+                    <Button shape="circle" icon={<EditOutlined />} style={{ marginRight: '15px' }} onClick={() => history.push(
+                        {
+                            pathname: 'admin/user',
+                            state: { user: record }
+                        })} />
                     <Button shape="circle" icon={<DeleteOutlined />} onClick={() => deleteUser(record.externalId)} />
                 </Space>
             ),

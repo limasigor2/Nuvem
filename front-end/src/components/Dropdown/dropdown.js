@@ -7,13 +7,10 @@ import localStorage from '../../services/localStorage';
 
 import './dropdown.scss';
 
-const DropdownComponent = ({ name, id, email }) => {
+const DropdownComponent = ({ id, email }) => {
 
     const menu = (
         <Menu>
-            <Menu.Item className="menu-info">
-                {name}
-            </Menu.Item>
             <Menu.Item className="menu-info">
                 {email}
             </Menu.Item>

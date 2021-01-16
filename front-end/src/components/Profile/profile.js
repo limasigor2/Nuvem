@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, notification } from 'antd';
+import { Link } from 'react-router-dom';
 
 import userService from '../../services/user';
 import localStorage from '../../services/localStorage';
+import history from '../../utils/history';
 
 import './profile.scss';
 
@@ -11,8 +13,6 @@ const Profile = () => {
 
     const [user, setUser] = useState({});
     const { username } = localStorage.getUser();
-
-    console.log(user)
 
     async function getUser() {
         const response = await userService.get(username);
@@ -34,11 +34,17 @@ const Profile = () => {
 
     const onFinish = async (values) => {
         const response = await userService.put({
-                ...values,
-                externalId: user.externalId
+            ...values,
+            externalId: user.externalId
+        });
+        const { data } = response;
+        if (response.status === 200) {
+            localStorage.update(data.email, data.username);
+            notification['success']({
+                message: 'Edição realizada com sucesso! Para continuar utilizando nosso sistema, por favor, realize login novamente',
             });
-        console.log(response);
-        console.log(values);
+            localStorage.logout();
+        }
     };
 
     return (
@@ -53,7 +59,7 @@ const Profile = () => {
                 <Form.Item
                     label="Nome"
                     name="name"
-                    rules={[{ required: true, message: 'Por favor digite seu nome' }, { min: 7, message: 'Por favor digite um nome válido' }]}
+                    rules={[{ min: 7, message: 'Por favor digite um nome válido' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -61,7 +67,6 @@ const Profile = () => {
                 <Form.Item
                     label="Nome de usuário"
                     name="username"
-                    rules={[{ required: true, message: 'Por favor digite seu nome de usuário' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -69,7 +74,6 @@ const Profile = () => {
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[{ required: true, message: 'Por favor digite seu email' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -77,24 +81,20 @@ const Profile = () => {
                 <Form.Item
                     label="Senha"
                     name="password"
-                    rules={[{ required: true, message: 'Por favor digite sua senha' }]}
                 >
                     <Input.Password />
                 </Form.Item>
 
-                {/* <Form.Item
-                    label="Senha"
-                    name="password"
-                    rules={[{ required: true, message: 'Por favor digite sua senha' }]}
-                >
-                    <Input.Password />
-                </Form.Item> */}
-
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Salvar
+                <div className="inline">
+                    <Link to="/">
+                        Cancelar
+                    </Link>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            Salvar
         </Button>
-                </Form.Item>
+                    </Form.Item>
+                </div>
             </Form>
         </div>
     )
