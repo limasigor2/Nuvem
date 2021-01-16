@@ -30,10 +30,6 @@ public class UserController {
 	@Autowired
 	private UserService service;
 	
-//	@PostMapping("/")
-//	public ResponseEntity<?> save(@RequestBody User user) {
-//		return ResponseEntity.status(HttpStatus.CREATED).body(service.saveOrUpdate(user));
-//	}
 //	
 	@GetMapping("/list")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -55,6 +51,7 @@ public class UserController {
 	@GetMapping("/{username}")
 	@PreAuthorize("authentication.principal.username == #username ||hasRole('ADMIN')")
 	public ResponseEntity<?> findOne(@PathVariable("username") String username) throws EntityNotFoundException{
+//		Authenticationn authentication = SecurityContextHolder.getContext().getAuthentication();
 		return ResponseEntity.status(HttpStatus.OK).body(service.findOne(username));
 	}
 	

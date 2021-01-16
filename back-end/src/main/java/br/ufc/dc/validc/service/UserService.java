@@ -8,12 +8,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
-import org.springframework.data.domain.Page;
 
 import br.ufc.dc.validc.exception.EntityNotFoundException;
 import br.ufc.dc.validc.model.Message;
 import br.ufc.dc.validc.model.User;
-import br.ufc.dc.validc.model.requests.SignUpRequest;
 import br.ufc.dc.validc.model.requests.UserDto;
 import br.ufc.dc.validc.repository.UserRepository;
 
@@ -23,9 +21,6 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	
-
-
 
 	public User saveOrUpdate(User user) {
 //		user.generateExternalId();
