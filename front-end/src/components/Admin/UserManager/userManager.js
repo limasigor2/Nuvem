@@ -6,43 +6,49 @@ import history from '../../../utils/history';
 import './userManager.scss';
 import user from '../../../services/user';
 
-const columns = [
-    {
-        title: 'Identificador',
-        dataIndex: 'id',
-        key: 'id',
-    },
-    {
-        title: 'Nome',
-        dataIndex: 'name',
-        key: 'name'
-    },
-    {
-        key: 'action',
-        render: (record) => (
-            <Space size="middle">
-                <Button shape="circle" icon={<EditOutlined />} style={{ marginRight: '15px' }} onClick={() => history.push('admin/user')} />
-                <Button shape="circle" icon={<DeleteOutlined />} />
-            </Space>
-        ),
-    },
-];
-
-
 const UserManager = () => {
 
     async function fetchData(size, page) {
         const response = await user.list(size, page);
+        setData(response.data);
         console.log(response);
     }
 
-    useEffect(() => { fetchData(5, 1) }, []);
+    async function deleteUser(externalId) {
+        const response = await user.delete(externalId);
+    }
 
-    const [data, setData] = useState([{
-        key: '1',
-        name: 'John Brown',
-        id: 32,
-    },]);
+    useEffect(() => { fetchData(0, 10) }, []);
+
+    const [data, setData] = useState(null);
+
+
+    const columns = [
+        {
+            title: 'Nome de usuário',
+            dataIndex: 'username',
+            key: 'username',
+        },
+        {
+            title: 'Nome',
+            dataIndex: 'name',
+            key: 'name'
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email'
+        },
+        {
+            key: 'action',
+            render: (record) => (
+                <Space size="middle">
+                    <Button shape="circle" icon={<EditOutlined />} style={{ marginRight: '15px' }} onClick={() => history.push('admin/user')} />
+                    <Button shape="circle" icon={<DeleteOutlined />} onClick={() => deleteUser(record.externalId)} />
+                </Space>
+            ),
+        },
+    ];
 
     return (
         <div className='user-manager-container' >

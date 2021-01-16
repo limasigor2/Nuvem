@@ -33,7 +33,10 @@ const Profile = () => {
     useEffect(() => { getUser(); }, [])
 
     const onFinish = async (values) => {
-        const response = await userService.put(values);
+        const response = await userService.put({
+                ...values,
+                externalId: user.externalId
+            });
         console.log(response);
         console.log(values);
     };
@@ -50,7 +53,7 @@ const Profile = () => {
                 <Form.Item
                     label="Nome"
                     name="name"
-                    rules={[{ required: true, message: 'Por favor digite seu nome' }, { min: 8, message: 'Por favor digite um nome válido' }]}
+                    rules={[{ required: true, message: 'Por favor digite seu nome' }, { min: 7, message: 'Por favor digite um nome válido' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -58,7 +61,7 @@ const Profile = () => {
                 <Form.Item
                     label="Nome de usuário"
                     name="username"
-                    rules={[{ required: true, message: 'Por favor digite seu nome de identificação' }]}
+                    rules={[{ required: true, message: 'Por favor digite seu nome de usuário' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -69,6 +72,14 @@ const Profile = () => {
                     rules={[{ required: true, message: 'Por favor digite seu email' }]}
                 >
                     <Input />
+                </Form.Item>
+
+                <Form.Item
+                    label="Senha"
+                    name="password"
+                    rules={[{ required: true, message: 'Por favor digite sua senha' }]}
+                >
+                    <Input.Password />
                 </Form.Item>
 
                 {/* <Form.Item

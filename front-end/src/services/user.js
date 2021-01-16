@@ -2,13 +2,11 @@ import { List } from 'antd/lib/form/Form';
 import api from './api';
 import localStorage from './localStorage';
 
-const externalId = localStorage.getUser() ? localStorage.getUser().id : null;
-
 const user = {
 
-    async get(externalId) {
+    async get(username) {
         try {
-            const response = await api.get('/user/me', { params: { username: externalId } });
+            const response = await api.get('/user/me', { params: { username: username } });
             return response;
         } catch (responseError) {
             const { response } = responseError;
@@ -17,12 +15,8 @@ const user = {
     },
 
     async put(values) {
-        let body = {
-            ...values,
-            externalId: externalId
-        }
         try {
-            const response = await api.put('user/me', body);
+            const response = await api.put('/user/me', values);
             return response;
         } catch (responseError) {
             const { response } = responseError;
@@ -33,6 +27,16 @@ const user = {
     async list(page, size) {
         try {
             const response = await api.get('user/list', { params: { page: page, size: size } });
+            return response;
+        } catch (responseError) {
+            const { response } = responseError;
+            return response;
+        }
+    },
+
+    async delete(externalId) {
+        try {
+            const response = await api.delete(`user/${externalId}`);
             return response;
         } catch (responseError) {
             const { response } = responseError;
