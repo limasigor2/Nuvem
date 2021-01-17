@@ -44,7 +44,7 @@ public class UserService {
 		return new Message("Usuário deletado com sucesso", "user.delete.success");
 	}
 
-//	public User update(String externalId, User userToUpdate)  throws EntityNotFoundException{
+//	public User update(String externalId)  throws EntityNotFoundException{
 //		User user = userRepository.findOneByExternalId(externalId).orElseThrow(() ->
 //		new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
 //		
