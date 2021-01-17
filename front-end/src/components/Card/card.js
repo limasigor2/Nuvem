@@ -6,7 +6,7 @@ import Document from '../Document/document';
 
 import './card.scss';
 
-const Card = ({ code, historic, edit }) => {
+const Card = ({ name, historic, edit }) => {
 
     const [file, setFile] = useState(null);
     const [type, setType] = useState('');
@@ -28,7 +28,7 @@ const Card = ({ code, historic, edit }) => {
     return (
         <div className="card-container">
             <div className="card-header style-header-and-footer">
-                <h3>{code}</h3>
+                <h3>{name}</h3>
                 <div className="file-actions">
                     <Button shape="circle" icon={<EditOutlined />} style={{marginRight:'15px'}} onClick={() => edit()} />
                     <Button shape="circle" icon={<DeleteOutlined />} />

@@ -23,6 +23,7 @@ const FileManager = () => {
             setData(response.data);
             setLoading(false);
         } else {
+            setLoading(false);
             // setLoading(false);
             // notification['error']({
             //     message: response.data.message,
@@ -38,12 +39,11 @@ const FileManager = () => {
             </div>
             {loading ? <div className="loading"><Spin /></div> :
                 <div className={showHistoric ? 'with-historic' : ''}>
-                    {data.map(item =>
-                        <div className="card-list" key={item}>
-                            <Card code={item} historic={() => setShowHistoric(!showHistoric)} edit={() => history.push('/document')} />
-                        </div>
-                    )}
-
+                    <div className="card-list" >
+                        {data.map(item =>
+                            <Card name={item} key={item} historic={() => setShowHistoric(!showHistoric)} edit={() => history.push('/document')} />
+                        )}
+                    </div>
                     {showHistoric && <Historic close={() => setShowHistoric(false)} />}
                 </div>
             }
