@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Space } from 'antd';
+import { Button, notification, Table, Space } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import history from '../../../utils/history';
 
@@ -7,20 +7,36 @@ import './list.scss';
 import user from '../../../services/user';
 
 const List = () => {
+    const [data, setData] = useState(null);
+    const [pagination, setPagination] = useState({
+        page: 0,
+        size: 10,
+    });
+    const [loading, setLoading] = useState(false);
 
-    async function fetchData(size, page) {
-        const response = await user.list(size, page);
-        setData(response.data);
-        console.log(response);
+    async function fetchData(page, size) {
+        setLoading(true);
+        const response = await user.list(page, size);
+        if (response.status === 200) {
+            setData(response.data);
+            setLoading(false);
+        } else {
+            setLoading(false);
+            notification['error']({
+                message: response.data.message,
+            });
+        }
     }
 
     async function deleteUser(externalId) {
         const response = await user.delete(externalId);
     }
 
-    useEffect(() => { fetchData(0, 10) }, []);
+    useEffect(() => { fetchData(pagination.page, pagination.size) }, []);
 
-    const [data, setData] = useState(null);
+    const handleTableChange = (pagination, filters, sorter) => {
+        console.log('aqui')
+    };
 
     const columns = [
         {
@@ -60,7 +76,8 @@ const List = () => {
                 <Button shape="circle" icon={<PlusOutlined />} onClick={() => history.push('/admin/user/register')} />
             </div>
             <div className="table-container padding-page">
-                <Table columns={columns} dataSource={data} />
+                <Table columns={columns} dataSource={data} loading={loading} pagination={pagination}
+                    onChange={handleTableChange} />
             </div>
         </div>
     )

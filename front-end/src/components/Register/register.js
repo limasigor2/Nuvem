@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, notification } from 'antd';
-import { Link } from 'react-router-dom';
 
 import './register.scss';
 import auth from '../../services/auth';
@@ -9,6 +8,9 @@ import history from '../../utils/history';
 
 const Register = () => {
 
+    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         if (localStorage.getUser()) {
             history.push('/home');
@@ -16,6 +18,8 @@ const Register = () => {
     }, []);
 
     const onFinish = async (values) => {
+        setDisabled(true);
+        setLoading(true);
         const response = await auth.register(values);
         if (response.status === 200) {
             notification['success']({
@@ -23,6 +27,8 @@ const Register = () => {
             });
             history.push('/');
         } else {
+            setDisabled(false);
+            setLoading(false);
             notification['error']({
                 message: response.data.message,
             });
@@ -42,7 +48,7 @@ const Register = () => {
                     name="name"
                     rules={[{ required: true, message: 'Por favor digite seu nome' }, { min: 7, message: 'Por favor digite um nome válido' }]}
                 >
-                    <Input />
+                    <Input disabled={disabled} />
                 </Form.Item>
 
                 <Form.Item
@@ -50,15 +56,15 @@ const Register = () => {
                     name="id"
                     rules={[{ required: true, message: 'Por favor digite seu nome de usuário' }]}
                 >
-                    <Input />
+                    <Input disabled={disabled} />
                 </Form.Item>
 
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[{ required: true, message: 'Por favor digite seu email' }, { type: 'email', message: 'Por favor digite um email válido'}]}
+                    rules={[{ required: true, message: 'Por favor digite seu email' }, { type: 'email', message: 'Por favor digite um email válido' }]}
                 >
-                    <Input />
+                    <Input disabled={disabled} />
                 </Form.Item>
 
                 <Form.Item
@@ -66,15 +72,15 @@ const Register = () => {
                     name="password"
                     rules={[{ required: true, message: 'Por favor digite sua senha' }]}
                 >
-                    <Input.Password />
+                    <Input.Password disabled={disabled} />
                 </Form.Item>
 
                 <div className="inline">
-                    <Link to="/">
+                    <Button type="link" disabled={disabled} onClick={() => history.push("/")} className='no-padding-left'>
                         Entre na conta
-                    </Link>
+                    </Button>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" disabled={disabled} loading={loading}>
                             Enviar
         </Button>
                     </Form.Item>
