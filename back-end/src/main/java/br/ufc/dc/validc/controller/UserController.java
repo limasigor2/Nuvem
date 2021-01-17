@@ -37,6 +37,12 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(service.listUser(page, size));
 	}
 	
+	@PutMapping("/{externalId}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> editUser(@RequestBody User user) throws EntityNotFoundException{
+		return ResponseEntity.status(HttpStatus.OK).body(service.update(user));
+	}
+	
 	@DeleteMapping("/{externalId}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> delete(@PathVariable("externalId") String externalId) throws EntityNotFoundException{
@@ -58,14 +64,13 @@ public class UserController {
 	@GetMapping("/me")
 	@PreAuthorize("authentication.principal.username == #username ||hasRole('USER')")
 	public ResponseEntity<?> getUser(@RequestParam("username") String username) throws EntityNotFoundException{
-		System.out.print(username);
 		return ResponseEntity.status(HttpStatus.OK).body(service.findOne(username));
 	}
 	
 	@PutMapping("/me")
-	@PreAuthorize("authentication.principal.username == #user.getUsername() ||hasRole('USER')")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> putUser(@RequestBody User user) throws EntityNotFoundException{
-		return ResponseEntity.status(HttpStatus.OK).body(service.saveOrUpdate( user));
+		return ResponseEntity.status(HttpStatus.OK).body(service.update(user));
 	}
 
 }

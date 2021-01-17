@@ -30,13 +30,6 @@ const List = () => {
         }
     }
 
-    async function deleteUser(externalId) {
-        const response = await user.delete(externalId);
-        if (response.status === 200) {
-
-        }
-    }
-
     useEffect(() => { fetchData(pagination.page, pagination.size) }, []);
 
     const handleTableChange = (pagination, filters, sorter) => {

@@ -38,9 +38,14 @@ const AddFile = () => {
                 });
                 setDefaultFileList([]);
                 setDisabled(false);
-                setLoading(true);
+                setLoading(false);
+            } else {
+                notification['error']({
+                    message: response.data.message,
+                });
+                setDisabled(false);
+                setLoading(false);
             }
-            console.log(response);
         }
     };
 

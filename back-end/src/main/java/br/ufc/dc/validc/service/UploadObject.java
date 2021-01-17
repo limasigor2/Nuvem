@@ -4,6 +4,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -30,15 +31,23 @@ public class UploadObject {
 
 	@Value("${app.awsServices.secretKey}")
 	private String secretKey;
+	
+	@Value("${app.awsServices.sessionToken}")
+	private String sessionToken;
 
 	public void send(File file, String username,  String fileName) throws IOException {
 		Regions clientRegion = Regions.fromName(regionName);
 
 		try {
-			BasicAWSCredentials credentialsProvider = new BasicAWSCredentials(accessKey, secretKey);
+//			BasicAWSCredentials credentialsProvider = new BasicAWSCredentials(accessKey, secretKey);
+			
+//			AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(clientRegion)
+//					.withCredentials(new AWSStaticCredentialsProvider(credentialsProvider)).build();
+			
+			BasicSessionCredentials sessionCredentials = new BasicSessionCredentials(accessKey, secretKey, sessionToken);
 
 			AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(clientRegion)
-					.withCredentials(new AWSStaticCredentialsProvider(credentialsProvider)).build();
+					.withCredentials(new AWSStaticCredentialsProvider(sessionCredentials)).build();
 
 			// Upload a file as a new object with ContentType and title specified.
 			PutObjectRequest request = new PutObjectRequest(bucketName, username + '/' +fileName, file);

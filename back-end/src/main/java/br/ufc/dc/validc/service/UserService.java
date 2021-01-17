@@ -2,9 +2,11 @@ package br.ufc.dc.validc.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -21,6 +23,8 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	PasswordEncoder encoder;
 
 	public User saveOrUpdate(User user) {
 //		user.generateExternalId();
@@ -44,19 +48,23 @@ public class UserService {
 		return new Message("Usuário deletado com sucesso", "user.delete.success");
 	}
 
-//	public User update(String externalId)  throws EntityNotFoundException{
-//		User user = userRepository.findOneByExternalId(externalId).orElseThrow(() ->
-//		new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
-//		
-////		if(!user.getEmail().equals(userToUpdate.getEmail()))
-////			user.setEmail(userToUpdate.getExternalId());
-////		if(!user.getName().equals(userToUpdate.getPassword()))
-////			user.setName(userToUpdate.getName());
-//		
-//		userRepository.save(user);
-//		
-//		return userRepository.save(user);
-//	}
+	public User update(User userToUpdate)  throws EntityNotFoundException{
+		User user = userRepository.findOneByExternalId(userToUpdate.getExternalId()).orElseThrow(() ->
+			new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
+		
+		if(!user.getUsername().equals(userToUpdate.getUsername()))
+			user.setUsername(userToUpdate.getUsername());
+		if(!user.getEmail().equals(userToUpdate.getEmail()))
+			user.setEmail(userToUpdate.getEmail());
+		if(!user.getName().equals(userToUpdate.getName()))
+			user.setName(userToUpdate.getName());
+		if(userToUpdate.getPassword()!=null)
+			user.setPassword(encoder.encode(userToUpdate.getPassword()));
+		
+		userRepository.save(user);
+		
+		return user;
+	}
 
 	public User findOne(String username) throws EntityNotFoundException {
 		User user = userRepository.findOneByUsername(username).orElseThrow(() ->

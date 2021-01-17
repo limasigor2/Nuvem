@@ -59,21 +59,7 @@ public class FileController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
         byte[] bytes = downloader.get(userName, fileName);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(contentType(fileName));
-        httpHeaders.setContentLength(bytes.length);
-        httpHeaders.setContentDispositionFormData("attachment",  URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20"));
-
-        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);		
-	}
-	
-	@GetMapping("/downloadFile/{fileName:.+}")
-	public ResponseEntity<?> downloadFileAdmin(@PathVariable String fileName, HttpServletRequest request) throws Exception{
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
-        byte[] bytes = downloader.get(userName, fileName);
-
+        
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(contentType(fileName));
         httpHeaders.setContentLength(bytes.length);
