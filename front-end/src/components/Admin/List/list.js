@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, notification, Table, Space } from 'antd';
+import { Button, Modal, notification, Table, Space } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import history from '../../../utils/history';
 
@@ -7,6 +7,8 @@ import './list.scss';
 import user from '../../../services/user';
 
 const List = () => {
+    const { confirm } = Modal;
+
     const [data, setData] = useState(null);
     const [pagination, setPagination] = useState({
         page: 0,
@@ -30,6 +32,9 @@ const List = () => {
 
     async function deleteUser(externalId) {
         const response = await user.delete(externalId);
+        if (response.status === 200) {
+
+        }
     }
 
     useEffect(() => { fetchData(pagination.page, pagination.size) }, []);
@@ -63,11 +68,33 @@ const List = () => {
                             pathname: 'admin/user/edit',
                             state: { user: record }
                         })} />
-                    <Button shape="circle" icon={<DeleteOutlined />} onClick={() => deleteUser(record.externalId)} />
+                    <Button shape="circle" icon={<DeleteOutlined />} onClick={() => showConfirm(record.externalId)} />
                 </Space>
             ),
         },
     ];
+
+    function showConfirm(externalId) {
+        confirm({
+            title: 'Você deseja deletar esse usuário?',
+            content: 'Deletando, você concorda que todas os dados do mesmo serão removidos',
+            async onOk() {
+                const response = await user.delete(externalId);
+                if (response.status === 200) {
+                    fetchData(pagination.page, pagination.size);
+                    notification['success']({
+                        message: 'Usuário deletado com sucesso',
+                    });
+                } else {
+                    notification['error']({
+                        message: response.data.message,
+                    });
+                }
+            },
+            okText: "Deletar",
+            cancelText: "Cancelar",
+        });
+    }
 
     return (
         <div className='user-manager-container' >
