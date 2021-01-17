@@ -28,9 +28,9 @@ const AddFile = () => {
     };
 
     const onFinish = async (values) => {
-        setDisabled(true);
-        setLoading(true);
         if (defaultFileList.length > 0) {
+            setDisabled(true);
+            setLoading(true);
             const response = await file.upload(values.file.file);
             if (response.status === 200) {
                 notification['success']({
@@ -46,6 +46,10 @@ const AddFile = () => {
                 setDisabled(false);
                 setLoading(false);
             }
+        } else {
+            notification['error']({
+                message: 'Por favor, adicione um arquivo',
+            });
         }
     };
 
