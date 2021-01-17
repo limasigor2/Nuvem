@@ -24,7 +24,7 @@ const user = {
 
     async list(page, size) {
         try {
-            const response = await api.get('user/list', { params: { page: page, size: size } });
+            const response = await api.get('/user/list', { params: { page: page, size: size } });
             return response;
         } catch (responseError) {
             const { response } = responseError;
@@ -34,7 +34,7 @@ const user = {
 
     async getByUsername(username) {
         try {
-            const response = await api.get(`user/${username}`);
+            const response = await api.get(`/user/${username}`);
             return response;
         } catch (responseError) {
             const { response } = responseError;
@@ -54,7 +54,7 @@ const user = {
 
     async delete(externalId) {
         try {
-            const response = await api.delete(`user/${externalId}`);
+            const response = await api.delete(`/user/${externalId}`);
             return response;
         } catch (responseError) {
             const { response } = responseError;
