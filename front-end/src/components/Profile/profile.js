@@ -18,7 +18,6 @@ const Profile = () => {
     async function getUser() {
         setDisabled(true);
         const response = await userService.get(username);
-        console.log(response)
         const { data } = response;
         if (response.status === 200) {
             setUser(data);

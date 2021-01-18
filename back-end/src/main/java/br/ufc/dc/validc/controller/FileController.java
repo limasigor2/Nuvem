@@ -65,7 +65,6 @@ public class FileController {
 	}
 
 	
-	
 	@DeleteMapping("/{fileName:.+}")
 	public ResponseEntity<?> delete(@PathVariable String fileName, HttpServletRequest request) throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -75,7 +74,7 @@ public class FileController {
 		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
 	}
 	
-	@GetMapping
+	@GetMapping("/files")
 	public ResponseEntity<?> list() throws ValidcException{
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();

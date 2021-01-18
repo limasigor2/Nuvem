@@ -1,4 +1,5 @@
 import React from 'react';
+import './document.scss';
 
 const Document = ({file, type}) => {
     return (
@@ -6,7 +7,7 @@ const Document = ({file, type}) => {
             <div className={`document-file ${type === 'application/pdf' ? 'typePdf' : ''}`} >
                 {type === 'application/pdf' ?
                     <embed className="file" src={file} width="100%"></embed> :
-                    <img src={file} />
+                    <img src={file} className="img"/>
                 }
             </div>
         </div>

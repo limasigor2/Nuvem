@@ -1,16 +1,15 @@
 .document-container{
     .document-file{
         transition: .5s;
-        border-top: 1px solid #ccc;
         text-align: center;
         .file {
             height: 100%;
             width: 100%;
         }
         img {
-            padding: 5px;
+            padding: 10px;
             box-sizing: border-box;
-            width: 100%;
+            height: 100%;
         }
     }
     .typePdf{
