@@ -7,21 +7,6 @@ Front-end do ValiDC usando react-js.
 - Necessário Node v12.18.2 ou superior
 - Necessário NPM v6.14.0 ou superior
 
-Tutotial de instalação do NodeJS e NPM (testado no ambiente Ubuntu 18.04 LTS)
-
-```
-sudo apt-get update
-sudo apt-get -y install curl dirmngr apt-transport-https lsb-release ca-certificates
-curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-
-sudo apt-get -y install gcc g++ make nodejs
-
-sudo npm install -g --save typescript react react-dom react-router-dom react-input-mask antd axios
-
-//for generate development env
-npm install
-```
-
 ## Estrutura do projeto
 
 - components → Páginas da aplicação e recursos que podem ser compartilhados por dois ou mais páginas
