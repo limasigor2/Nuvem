@@ -22,14 +22,17 @@ const file = {
         }
     },
 
-    async get(filename) {
-        const response = await api.get(
-            `/downloadFile/${filename}`,
-            {
-                responseType: 'arraybuffer'
-            }
-        );
-        return response;
+    async get(fileName) {
+        try {
+            const response = await api.get(
+                `/downloadFile${fileName}`, {
+                Accept: 'application/pdf', responseType: 'arraybuffer'
+            });
+            return response;
+        } catch (responseError) {
+            const { response } = responseError;
+            return response;
+        }
     },
 
     async getFiles() {

@@ -34,10 +34,25 @@ const FileManager = () => {
         }
     }
 
+    async function get(item) {
+        console.log('entrou aqui')
+        const username = localStorage.getUser().username;
+        let filename = item.replace(username, "");
+        const response = await file.get(filename);
+        if (response.status === 200) {
+            let file = new Blob([response.data], { type: response.headers['content-type'] });
+            return file;
+        } else {
+            notification['error']({
+                message: response.data.message,
+            });
+        }
+        console.log(response);
+    }
+
     function deleteConfirm(item) {
         const username = localStorage.getUser().username;
-        let filename = item.replace(username,"");
-        console.log(filename);
+        let filename = item.replace(username, "");
         confirm({
             title: 'Você deseja deletar esse arquivo?',
             async onOk() {
@@ -69,7 +84,7 @@ const FileManager = () => {
                     {data &&
                         <div className="card-list" >
                             {data.map(item =>
-                                <Card name={item} key={item} remove={() => deleteConfirm(item)} historic={() => setShowHistoric(!showHistoric)} edit={() => history.push('/document')} />
+                                <Card name={item} key={item} remove={() => deleteConfirm(item)} get={() => get(item)} historic={() => setShowHistoric(!showHistoric)} edit={() => history.push('/document')} />
                             )}
                         </div>
                     }
