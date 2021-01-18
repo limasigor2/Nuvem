@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +31,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
+@RequestMapping("/file")
 public class FileController {
 
 	@Autowired
@@ -38,7 +40,7 @@ public class FileController {
 	@Autowired
 	private AwsClient awsClient;
 
-	@PostMapping("/uploadFile")
+	@PostMapping("/upload")
 	public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file)
 			throws IllegalStateException, IOException, FileStorageException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -49,7 +51,7 @@ public class FileController {
 		return new UploadFileResponse(fileName, file.getContentType(), file.getSize());
 	}
 
-	@GetMapping("/downloadFile/{fileName:.+}")
+	@GetMapping("/download/{fileName:.+}")
 	public ResponseEntity<?> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
@@ -65,16 +67,16 @@ public class FileController {
 	}
 
 	
-	@DeleteMapping("/{fileName:.+}")
+	@DeleteMapping("/delete/{fileName:.+}")
 	public ResponseEntity<?> delete(@PathVariable String fileName, HttpServletRequest request) throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
 		awsClient.delete(userName, fileName);
 
-		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
-	@GetMapping("/files")
+	@GetMapping("/list")
 	public ResponseEntity<?> list() throws ValidcException{
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
@@ -86,14 +88,14 @@ public class FileController {
 		String[] arr = keyname.split("\\.");
 		String type = arr[arr.length - 1];
 		switch (type) {
-		case "txt":
-			return MediaType.TEXT_PLAIN;
 		case "png":
 			return MediaType.IMAGE_PNG;
 		case "jpg":
 			return MediaType.IMAGE_JPEG;
 		case "jpeg":
 			return MediaType.IMAGE_JPEG;
+		case "pdf":
+			return MediaType.APPLICATION_PDF;
 		default:
 			return MediaType.APPLICATION_OCTET_STREAM;
 		}

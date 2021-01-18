@@ -31,6 +31,7 @@ import com.amazonaws.util.IOUtils;
 import br.ufc.dc.validc.exception.EntityNotFoundException;
 import br.ufc.dc.validc.exception.FileStorageException;
 import br.ufc.dc.validc.exception.ValidcException;
+import br.ufc.dc.validc.model.Message;
 
 @Component
 public class AwsClient {
@@ -46,7 +47,7 @@ public class AwsClient {
 
 	@Value("${cloud.aws.credentials.secretKey}")
 	private String secretKey;
-	
+
 	@Value("${cloud.aws.credentials.sessionToken}")
 	private String sessionToken;
 
@@ -54,10 +55,18 @@ public class AwsClient {
 		if (fileName.contains("..")) {
 			throw new FileStorageException("file.invalid.path", "Filename contains invalid path sequence " + fileName);
 		}
-		BasicAWSCredentials credentialsProvider = new BasicAWSCredentials(accessKey, secretKey);
+		
+		BasicSessionCredentials sessionCredentials = new BasicSessionCredentials(accessKey, secretKey,
+				sessionToken);
 		Regions clientRegion = Regions.fromName(regionName);
 		AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(clientRegion)
-				.withCredentials(new AWSStaticCredentialsProvider(credentialsProvider)).build();
+				.withCredentials(new AWSStaticCredentialsProvider(sessionCredentials)).build();
+		
+		
+//		BasicAWSCredentials credentialsProvider = new BasicAWSCredentials(accessKey, secretKey);
+//		Regions clientRegion = Regions.fromName(regionName);
+//		AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(clientRegion)
+//				.withCredentials(new AWSStaticCredentialsProvider(credentialsProvider)).build();
 
 		S3Object fullObject;
 		System.out.println("Downloading file");
@@ -74,12 +83,13 @@ public class AwsClient {
 		Regions clientRegion = Regions.fromName(regionName);
 
 		try {
-			
-			BasicSessionCredentials sessionCredentials = new BasicSessionCredentials(accessKey, secretKey, sessionToken);
+
+			BasicSessionCredentials sessionCredentials = new BasicSessionCredentials(accessKey, secretKey,
+					sessionToken);
 
 			AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(clientRegion)
 					.withCredentials(new AWSStaticCredentialsProvider(sessionCredentials)).build();
-			
+
 //			BasicAWSCredentials credentialsProvider = new BasicAWSCredentials(accessKey, secretKey);
 //
 //			AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(clientRegion)
@@ -110,10 +120,12 @@ public class AwsClient {
 		Regions clientRegion = Regions.fromName(regionName);
 
 		try {
-			BasicAWSCredentials credentialsProvider = new BasicAWSCredentials(accessKey, secretKey);
+			BasicSessionCredentials sessionCredentials = new BasicSessionCredentials(accessKey, secretKey,
+					sessionToken);
 
 			AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(clientRegion)
-					.withCredentials(new AWSStaticCredentialsProvider(credentialsProvider)).build();
+					.withCredentials(new AWSStaticCredentialsProvider(sessionCredentials)).build();
+			
 			s3Client.deleteObject(new DeleteObjectRequest(bucketName, username + "/" + filename));
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -129,11 +141,12 @@ public class AwsClient {
 //
 //			AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(clientRegion)
 //					.withCredentials(new AWSStaticCredentialsProvider(credentialsProvider)).build();
-			BasicSessionCredentials sessionCredentials = new BasicSessionCredentials(accessKey, secretKey, sessionToken);
+			BasicSessionCredentials sessionCredentials = new BasicSessionCredentials(accessKey, secretKey,
+					sessionToken);
 
 			AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(clientRegion)
 					.withCredentials(new AWSStaticCredentialsProvider(sessionCredentials)).build();
-			
+
 			ListObjectsRequest listObjectsRequest = new ListObjectsRequest().withBucketName(bucketName)
 					.withPrefix(username + "/");
 
@@ -156,7 +169,8 @@ public class AwsClient {
 			return records;
 		} catch (Exception e) {
 			// TODO: handle exception
-			throw new ValidcException(HttpStatus.INTERNAL_SERVER_ERROR, "cloud.aws.error", "Não foi possível listar os objetos");
+			throw new ValidcException(HttpStatus.INTERNAL_SERVER_ERROR, "cloud.aws.error",
+					"Não foi possível listar os objetos");
 		}
 	}
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Upload, message } from 'antd';
+import { Form, Input, Button, Upload } from 'antd';
 import { PaperClipOutlined } from '@ant-design/icons';
+import md5 from 'crypto-js/md5';
 
 const { Dragger } = Upload;
 
@@ -25,6 +26,9 @@ const DocumentValidation = () => {
 
     const onFinish = (values) => {
         console.log(values);
+        let md5Hash = md5(values.file.file);
+        console.log(md5Hash);
+        // var md5Hash = CryptoJS.MD5("Test");
     };
 
     return (
