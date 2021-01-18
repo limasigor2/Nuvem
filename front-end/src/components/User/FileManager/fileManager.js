@@ -35,7 +35,6 @@ const FileManager = () => {
     }
 
     async function get(item) {
-        console.log('entrou aqui')
         const username = localStorage.getUser().username;
         let filename = item.replace(username, "");
         const response = await file.get(filename);
@@ -47,7 +46,6 @@ const FileManager = () => {
                 message: response.data.message,
             });
         }
-        console.log(response);
     }
 
     function deleteConfirm(item) {

@@ -3,7 +3,6 @@ import api from './api';
 
 const file = {
     async upload(asset) {
-        console.log(asset);
         let formData = new FormData();
         formData.append('file', asset);
 

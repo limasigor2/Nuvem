@@ -16,11 +16,7 @@ const Card = ({ name, remove, get, historic, edit }) => {
     async function document() {
         setLoading(true);
         const file = await get();
-        console.log(file);
-        if (file.type === "application/octet-stream") {
-            setType('application/pdf');
-        }
-        else setType(file.type);
+        setType(file.type);
         let fileURL = URL.createObjectURL(file);
         setFile(fileURL);
         if (file) {
