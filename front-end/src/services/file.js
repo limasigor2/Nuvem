@@ -40,7 +40,16 @@ const file = {
             const { response } = responseError;
             return response;
         }
+    },
 
+    async delete(fileName) {
+        try {
+            const response = await api.delete(`/delete${fileName}`);
+            return response;
+        } catch (responseError) {
+            const { response } = responseError;
+            return response;
+        }
     }
 }
 
