@@ -12,7 +12,7 @@
 	<groupId>br.ufc.dc</groupId>
 	<artifactId>validc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>ValiDC</name>
 	<description>Projeto para a disciplina de Nuvem</description>
 
