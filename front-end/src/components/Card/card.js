@@ -30,7 +30,7 @@ const Card = ({ name, remove, get, historic, edit }) => {
             <div className="card-header style-header-and-footer">
                 <h3>{name}</h3>
                 <div className="file-actions">
-                    <Button shape="circle" icon={<EditOutlined />} style={{ marginRight: '15px' }} onClick={() => edit()} />
+                    {/* <Button shape="circle" icon={<EditOutlined />} style={{ marginRight: '15px' }} onClick={() => edit()} /> */}
                     <Button shape="circle" icon={<DeleteOutlined />} onClick={() => remove()} />
                 </div>
             </div>

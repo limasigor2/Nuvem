@@ -13,7 +13,7 @@ const file = {
                 },
             };
 
-            const response = await api.post('/uploadFile', formData, config);
+            const response = await api.post('/file/upload', formData, config);
             return response;
         } catch (responseError) {
             const { response } = responseError;
@@ -24,7 +24,7 @@ const file = {
     async get(fileName) {
         try {
             const response = await api.get(
-                `/downloadFile${fileName}`, {
+                `/file/download${fileName}`, {
                 Accept: 'application/pdf', responseType: 'arraybuffer'
             });
             return response;
@@ -36,7 +36,7 @@ const file = {
 
     async getFiles() {
         try {
-            const response = await api.get("/files");
+            const response = await api.get("/file/list");
             return response;
         } catch (responseError) {
             const { response } = responseError;
@@ -46,7 +46,7 @@ const file = {
 
     async delete(fileName) {
         try {
-            const response = await api.delete(`/delete${fileName}`);
+            const response = await api.delete(`/file/delete${fileName}`);
             return response;
         } catch (responseError) {
             const { response } = responseError;
