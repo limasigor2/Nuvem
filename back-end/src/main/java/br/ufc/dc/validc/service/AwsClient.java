@@ -79,7 +79,7 @@ public class AwsClient {
 		}
 	}
 
-	public void send(File file, String username, String fileName) throws IOException {
+	public void send(File file, String username, String fileName) throws IOException, ValidcException {
 		Regions clientRegion = Regions.fromName(regionName);
 
 		try {
@@ -103,13 +103,16 @@ public class AwsClient {
 			request.setMetadata(metadata);
 			s3Client.putObject(request);
 		} catch (AmazonServiceException e) {
+			e.printStackTrace();
+			throw new ValidcException(HttpStatus.INTERNAL_SERVER_ERROR, "aws.send-file.error", "Error ao salvar arquivo na aws");
 			// The call was transmitted successfully, but Amazon S3 couldn't process
 			// it, so it returned an error response.
-			e.printStackTrace();
+			
 		} catch (SdkClientException e) {
 			// Amazon S3 couldn't be contacted for a response, or the client
 			// couldn't parse the response from Amazon S3.
 			e.printStackTrace();
+			throw new ValidcException(HttpStatus.INTERNAL_SERVER_ERROR, "aws.send-file.error", "Error ao salvar arquivo na aws");
 		}
 	}
 
