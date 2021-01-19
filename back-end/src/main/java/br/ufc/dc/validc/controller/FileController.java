@@ -3,6 +3,7 @@ package br.ufc.dc.validc.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.security.NoSuchAlgorithmException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.ufc.dc.validc.exception.FileStorageException;
 import br.ufc.dc.validc.exception.ValidcException;
 import br.ufc.dc.validc.model.response.UploadFileResponse;
 import br.ufc.dc.validc.service.AwsClient;
 import br.ufc.dc.validc.service.FileStorageService;
+import br.ufc.dc.validc.service.HashFileService;
 import br.ufc.dc.validc.service.UserDetailsImpl;
 
 import org.springframework.security.core.Authentication;
@@ -36,17 +37,21 @@ public class FileController {
 	private FileStorageService fileStorageService;
 	
 	@Autowired
+	private HashFileService hashFileservice;
+	
+	@Autowired
 	private AwsClient awsClient;
 
 	@PostMapping("/uploadFile")
 	public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file)
-			throws IllegalStateException, IOException, FileStorageException {
+			throws IllegalStateException, IOException, NoSuchAlgorithmException, ValidcException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
 		String fileName = fileStorageService.getFileName(file);
 		File file2 = fileStorageService.multipartToFile(file);
-		awsClient.send(file2, userName, fileStorageService.getFileName(file));
-		return new UploadFileResponse(fileName, file.getContentType(), file.getSize());
+		awsClient.send(file2, userName, fileName);
+		String hashValue = hashFileservice.save(file, userName, fileName);
+		return new UploadFileResponse(fileName, file.getContentType(), file.getSize(), hashValue);
 	}
 
 	@GetMapping("/downloadFile/{fileName:.+}")
@@ -70,7 +75,7 @@ public class FileController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
 		awsClient.delete(userName, fileName);
-
+		hashFileservice.delete(userName, fileName);
 		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
 	}
 	
