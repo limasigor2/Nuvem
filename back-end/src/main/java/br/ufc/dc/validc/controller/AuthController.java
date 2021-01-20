@@ -69,7 +69,7 @@ public class AuthController {
 		return ResponseEntity.ok(new JwtResponse(jwt, 
 												 userDetails.getId(), 
 												 userDetails.getUsername(), 
-												 userDetails.getEmail(), 
+												 userDetails.getEmail(),
 												 roles));
 	}
 
@@ -102,6 +102,8 @@ public class AuthController {
 			roles.add(userRole);
 		} else {
 			strRoles.forEach(role -> {
+				System.out.print(role);
+				
 				switch (role) {
 				case "admin":
 					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)

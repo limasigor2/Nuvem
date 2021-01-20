@@ -7,18 +7,13 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 import br.ufc.validc.property.FileStorageProperties;
 
-
 @SpringBootApplication
 @EnableAutoConfiguration
-@EnableConfigurationProperties({
-	FileStorageProperties.class
-})
+@EnableConfigurationProperties({ FileStorageProperties.class })
 public class ValiDcApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ValiDcApplication.class, args);
 	}
-	
-	
 
 }

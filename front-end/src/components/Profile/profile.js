@@ -3,24 +3,26 @@ import { Form, Input, Button, notification } from 'antd';
 
 import userService from '../../services/user';
 import localStorage from '../../services/localStorage';
+import history from '../../utils/history';
 
 import './profile.scss';
 
 const Profile = () => {
     const [form] = Form.useForm();
 
+    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [user, setUser] = useState({});
     const { username } = localStorage.getUser();
 
-    console.log(user)
-
     async function getUser() {
+        setDisabled(true);
         const response = await userService.get(username);
-        console.log(response)
         const { data } = response;
         if (response.status === 200) {
             setUser(data);
-            form.setFieldsValue({ name: data.name, username: data.username, email: data.email })
+            form.setFieldsValue({ name: data.name, username: data.username, email: data.email });
+            setDisabled(false);
         }
         else {
             notification['error']({
@@ -33,9 +35,26 @@ const Profile = () => {
     useEffect(() => { getUser(); }, [])
 
     const onFinish = async (values) => {
-        const response = await userService.put(values);
-        console.log(response);
-        console.log(values);
+        setDisabled(true);
+        setLoading(true);
+        const response = await userService.put({
+            ...values,
+            externalId: user.externalId
+        });
+        const { data } = response;
+        if (response.status === 200) {
+            localStorage.update(data.email, data.username);
+            notification['success']({
+                message: 'Edição realizada com sucesso! Para continuar utilizando nosso sistema, por favor, realize login novamente',
+            });
+            localStorage.logout();
+        } else {
+            setDisabled(true);
+            setLoading(true);
+            notification['error']({
+                message: response.data.message,
+            });
+        }
     };
 
     return (
@@ -50,40 +69,42 @@ const Profile = () => {
                 <Form.Item
                     label="Nome"
                     name="name"
-                    rules={[{ required: true, message: 'Por favor digite seu nome' }, { min: 8, message: 'Por favor digite um nome válido' }]}
+                    rules={[{ min: 7, message: 'Por favor digite um nome válido' }]}
                 >
-                    <Input />
+                    <Input disabled={disabled} />
                 </Form.Item>
 
                 <Form.Item
                     label="Nome de usuário"
                     name="username"
-                    rules={[{ required: true, message: 'Por favor digite seu nome de identificação' }]}
                 >
-                    <Input />
+                    <Input disabled={disabled} />
                 </Form.Item>
 
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[{ required: true, message: 'Por favor digite seu email' }]}
                 >
-                    <Input />
+                    <Input disabled={disabled} />
                 </Form.Item>
 
-                {/* <Form.Item
+                <Form.Item
                     label="Senha"
                     name="password"
-                    rules={[{ required: true, message: 'Por favor digite sua senha' }]}
                 >
-                    <Input.Password />
-                </Form.Item> */}
-
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Salvar
-        </Button>
+                    <Input.Password disabled={disabled} />
                 </Form.Item>
+
+                <div className="inline">
+                    <Button type="link" disabled={disabled} onClick={() => history.push("/")} className='no-padding-left'>
+                        Cancelar
+                        </Button>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" disabled={disabled} loading={loading}>
+                            Salvar
+        </Button>
+                    </Form.Item>
+                </div>
             </Form>
         </div>
     )

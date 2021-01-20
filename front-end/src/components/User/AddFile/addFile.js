@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-import { Form, Button, Upload, message } from 'antd';
+import { Form, Button, notification, Upload } from 'antd';
 import { PaperClipOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+
+import file from '../../../services/file';
+import history from '../../../utils/history';
 
 const { Dragger } = Upload;
 
 const AddFile = () => {
     const [defaultFileList, setDefaultFileList] = useState([]);
     const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const uploadFile = {
         accept: '.png, .jpg, .jpeg, .pdf',
@@ -23,8 +27,30 @@ const AddFile = () => {
         }
     };
 
-    const onFinish = (values) => {
-        console.log(values);
+    const onFinish = async (values) => {
+        if (defaultFileList.length > 0) {
+            setDisabled(true);
+            setLoading(true);
+            const response = await file.upload(values.file.file);
+            if (response.status === 200) {
+                notification['success']({
+                    message: 'Arquivo enviado com sucesso!',
+                });
+                setDefaultFileList([]);
+                setDisabled(false);
+                setLoading(false);
+            } else {
+                notification['error']({
+                    message: response.data.message,
+                });
+                setDisabled(false);
+                setLoading(false);
+            }
+        } else {
+            notification['error']({
+                message: 'Por favor, adicione um arquivo',
+            });
+        }
     };
 
     return (
@@ -53,11 +79,11 @@ const AddFile = () => {
                 </Form.Item>
 
                 <div className="inline">
-                    <Link to="/home">
+                    <Button type="link" disabled={disabled} onClick={() => history.goBack()} className='no-padding-left'>
                         Cancelar
-                    </Link>
+                    </Button>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" disabled={disabled} loading={loading}>
                             Enviar
                         </Button>
                     </Form.Item>

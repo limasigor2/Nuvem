@@ -15,7 +15,6 @@ import './header.scss';
 const Header = () => {
     const [user, setUser] = useState(null)
     const { pathname } = useLocation();
-    const userLocal = localStorage.getUser();
 
     async function getUser(username) {
         const response = await userService.get(username);
@@ -29,8 +28,9 @@ const Header = () => {
     };
 
     useEffect(() => {
-        if (userLocal)
-            getUser(userLocal.username);
+        if (localStorage.getUser()) {
+            getUser(localStorage.getUser().username);
+        }
         else {
             localStorage.logout();
         }
@@ -44,8 +44,8 @@ const Header = () => {
                     <p>ValiDC</p>
                 </div>
             </Link>
-            {user ?
-                <Dropdown name={user.name} email={user.email} id={user.username} />
+            {localStorage.getUser() ?
+                <Dropdown email={localStorage.getUser().email} id={localStorage.getUser().username} />
                 :
                 <div>
                     {pathname !== '/document/validation' &&

@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, notification } from 'antd';
-import { Link } from 'react-router-dom';
 
 import history from '../../utils/history';
 import auth from '../../services/auth';
@@ -10,18 +9,27 @@ import './login.scss';
 
 const Login = () => {
 
+    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         if (localStorage.getUser()) history.push('/home');
     }, []);
 
     const onFinish = async (values) => {
+        setDisabled(true);
+        setLoading(true);
         const response = await auth.login(values.id, values.password);
         if (response.status === 200) {
             history.push('/home');
+            setDisabled(false);
+            setLoading(false);
         } else {
             notification['error']({
                 message: response.data.message,
             });
+            setDisabled(false);
+            setLoading(false);
         }
     };
 
@@ -35,21 +43,21 @@ const Login = () => {
                     name="id"
                     rules={[{ required: true, message: 'Por favor digite seu nome de usuário' }]}
                 >
-                    <Input placeholder="Nome de usuário" />
+                    <Input placeholder="Nome de usuário" disabled={disabled} />
                 </Form.Item>
 
                 <Form.Item
                     name="password"
                     rules={[{ required: true, message: 'Por favor digite sua senha' }]}
                 >
-                    <Input.Password placeholder="Senha" />
+                    <Input.Password placeholder="Senha" disabled={disabled} />
                 </Form.Item>
                 <div className="inline">
-                    <Link to="/register">
+                    <Button type="link" disabled={disabled} onClick={() => history.push("/register")} className='no-padding-left'>
                         Crie sua conta
-                    </Link>
+                    </Button>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" disabled={disabled} loading={loading}>
                             Enviar
         </Button>
                     </Form.Item>

@@ -1,31 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, notification } from 'antd';
+import { Form, Input, Button, notification} from 'antd';
 
-import './register.scss';
-import auth from '../../services/auth';
-import localStorage from '../../services/localStorage';
-import history from '../../utils/history';
+import history from '../../../utils/history';
+import userService from '../../../services/user';
 
-const Register = () => {
+const Edit = () => {
+    const [form] = Form.useForm();
 
+    const [user, setUser] = useState(null);
     const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        if (localStorage.getUser()) {
-            history.push('/home');
-        }
-    }, []);
 
     const onFinish = async (values) => {
         setDisabled(true);
         setLoading(true);
-        const response = await auth.register(values);
+        const response = await userService.edit({
+            ...values,
+            externalId: user.externalId
+        });
+        const { data } = response;
         if (response.status === 200) {
             notification['success']({
-                message: 'Cadastro realizado com sucesso',
+                message: 'Edição realizada com sucesso!',
             });
-            history.push('/');
+            history.push("/admin");
         } else {
             setDisabled(false);
             setLoading(false);
@@ -35,26 +33,37 @@ const Register = () => {
         }
     };
 
+    useEffect(() => {
+        if (history.location.state.user) {
+            setUser(history.location.state.user);
+            let data = history.location.state.user;
+            form.setFieldsValue({ name: data.name, username: data.username, email: data.email })
+        } else {
+            history.push("/admin");
+        };
+    }, [])
+
     return (
-        <div className="register-container content-align-center form-container">
+        <div className="user-registration-container content-align-center form-container">
             <Form
+                form={form}
                 name="basic"
                 onFinish={onFinish}
                 layout={'vertical'}
             >
-                <h1>Crie sua conta</h1>
+                <h1>Editar usuário</h1>
                 <Form.Item
                     label="Nome"
                     name="name"
-                    rules={[{ required: true, message: 'Por favor digite seu nome' }, { min: 7, message: 'Por favor digite um nome válido' }]}
+                    rules={[{ required: true, message: 'Por favor o nome' }, { min: 7, message: 'Por favor digite um nome válido' }]}
                 >
                     <Input disabled={disabled} />
                 </Form.Item>
 
                 <Form.Item
                     label="Nome de usuário"
-                    name="id"
-                    rules={[{ required: true, message: 'Por favor digite seu nome de usuário' }]}
+                    name="username"
+                    rules={[{ required: true, message: 'Por favor digite o nome de usuário' }]}
                 >
                     <Input disabled={disabled} />
                 </Form.Item>
@@ -62,27 +71,18 @@ const Register = () => {
                 <Form.Item
                     label="Email"
                     name="email"
-                    rules={[{ required: true, message: 'Por favor digite seu email' }, { type: 'email', message: 'Por favor digite um email válido' }]}
+                    rules={[{ required: true, message: 'Por favor digite o email' }]}
                 >
                     <Input disabled={disabled} />
                 </Form.Item>
-
-                <Form.Item
-                    label="Senha"
-                    name="password"
-                    rules={[{ required: true, message: 'Por favor digite sua senha' }]}
-                >
-                    <Input.Password disabled={disabled} />
-                </Form.Item>
-
                 <div className="inline">
-                    <Button type="link" disabled={disabled} onClick={() => history.push("/")} className='no-padding-left'>
-                        Entre na conta
+                    <Button type="link" disabled={disabled} onClick={() => history.push("/admin")} className='no-padding-left'>
+                        Cancelar
                     </Button>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" disabled={disabled} loading={loading}>
                             Enviar
-        </Button>
+                        </Button>
                     </Form.Item>
                 </div>
             </Form>
@@ -90,4 +90,4 @@ const Register = () => {
     )
 }
 
-export default Register;
+export default Edit;

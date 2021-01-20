@@ -3,8 +3,12 @@ import history from '../utils/history';
 const AUTH = 'VALIDC';
 
 const storage = {
-    login(data){
+    login(data) {
         localStorage.setItem(AUTH, JSON.stringify(data));
+    },
+    update(email, username) {
+        const user = JSON.parse(localStorage.getItem(AUTH));
+        localStorage.setItem(AUTH, JSON.stringify({ ...user, username: username, email: email }));
     },
     getUser() {
         if (localStorage.getItem(AUTH)) {
@@ -24,7 +28,7 @@ const storage = {
             return accessToken;
         }
     },
-    logout(){
+    logout() {
         localStorage.removeItem(AUTH);
         history.push('/');
     },

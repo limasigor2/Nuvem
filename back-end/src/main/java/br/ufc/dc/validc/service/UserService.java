@@ -2,12 +2,10 @@ package br.ufc.dc.validc.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
 
 import br.ufc.dc.validc.exception.EntityNotFoundException;
 import br.ufc.dc.validc.model.Message;
@@ -17,50 +15,58 @@ import br.ufc.dc.validc.repository.UserRepository;
 
 @Service
 public class UserService {
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
+	@Autowired
+	PasswordEncoder encoder;
 
 	public User saveOrUpdate(User user) {
 //		user.generateExternalId();
-		
+
 		return userRepository.save(user);
 	}
-	
-	public List<UserDto> listUser(int page, int size){
+
+	public List<UserDto> listUser(int page, int size) {
 		List<UserDto> users = new ArrayList<>(size);
-		userRepository.findAll(PageRequest.of(page, size)).forEach(user ->{
-			users.add(new UserDto(user.getName(), user.getUsername(), user.getEmail(), user.getExternalId(), user.getRoles()));
-		});;
-		
+		userRepository.findAll(PageRequest.of(page, size)).forEach(user -> {
+			users.add(new UserDto(user.getName(), user.getUsername(), user.getEmail(), user.getExternalId(),
+					user.getRoles()));
+		});
+		;
+
 		return users;
 	}
-	
+
 	public Message delete(String externalId) throws EntityNotFoundException {
-		User user = userRepository.findOneByExternalId(externalId).orElseThrow(() ->
-			new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
+		User user = userRepository.findOneByExternalId(externalId)
+				.orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
 		userRepository.delete(user);
 		return new Message("Usuário deletado com sucesso", "user.delete.success");
 	}
 
-//	public User update(String externalId, User userToUpdate)  throws EntityNotFoundException{
-//		User user = userRepository.findOneByExternalId(externalId).orElseThrow(() ->
-//		new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
-//		
-////		if(!user.getEmail().equals(userToUpdate.getEmail()))
-////			user.setEmail(userToUpdate.getExternalId());
-////		if(!user.getName().equals(userToUpdate.getPassword()))
-////			user.setName(userToUpdate.getName());
-//		
-//		userRepository.save(user);
-//		
-//		return userRepository.save(user);
-//	}
+	public User update(User userToUpdate) throws EntityNotFoundException {
+		User user = userRepository.findOneByExternalId(userToUpdate.getExternalId())
+				.orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
+
+		if (!user.getUsername().equals(userToUpdate.getUsername()))
+			user.setUsername(userToUpdate.getUsername());
+		if (!user.getEmail().equals(userToUpdate.getEmail()))
+			user.setEmail(userToUpdate.getEmail());
+		if (!user.getName().equals(userToUpdate.getName()))
+			user.setName(userToUpdate.getName());
+		if (userToUpdate.getPassword() != null)
+			user.setPassword(encoder.encode(userToUpdate.getPassword()));
+
+		userRepository.save(user);
+
+		return user;
+	}
 
 	public User findOne(String username) throws EntityNotFoundException {
-		User user = userRepository.findOneByUsername(username).orElseThrow(() ->
-			new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
+		User user = userRepository.findOneByUsername(username)
+				.orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado", "database.user.notfound"));
 		return user;
 	}
 
@@ -88,12 +94,5 @@ public class UserService {
 			return false;
 		return true;
 	}
-
-
-
-	
-
-	
-	
 
 }

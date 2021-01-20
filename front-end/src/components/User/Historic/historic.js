@@ -1,9 +1,11 @@
 import React from 'react';
 import { CheckCircleOutlined, CloseCircleOutlined, CloseOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 import './historic.scss'
 
-const Historic = ({close}) => {
+const Historic = ({ close, data }) => {
+
     const card = (data, status, justificative) => {
         return (
             <div className="historic-card">
@@ -19,16 +21,22 @@ const Historic = ({close}) => {
             </div>
         )
     }
+
     return (
         <div className="historic-container">
             <div className="historic-header">
                 <h2>Histórico de validações</h2>
-                <CloseOutlined onClick={() => close()}/>
+                <CloseOutlined onClick={() => close()} />
             </div>
-            <div className="historic-content">
-                {card('bciuberfub', true, 'niujbnibnionbp')}
-                {card('bciuberfub', true, 'niujbnibnionbp')}
-            </div>
+            {data ?
+                <div className="historic-content">
+                    {data.map(item =>
+                        card(item.createdAt, item.isValid, item.motivo)
+                    )}
+                </div>
+                :
+                <div className="loading"><Spin /></div>
+            }
         </div>
     )
 }

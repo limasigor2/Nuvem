@@ -13,9 +13,10 @@ api.interceptors.request.use(async (config) => {
     if (auth) {
         if (auth) {
             const { accessToken } = JSON.parse(auth);
+            let bearerToken = `Bearer ${accessToken}`;
             const tmpConfig = config;
             if (accessToken) {
-              tmpConfig.headers.Authorization = accessToken;
+              tmpConfig.headers.Authorization = bearerToken;
             }
           }
     }
