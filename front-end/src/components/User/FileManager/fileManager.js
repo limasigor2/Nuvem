@@ -9,11 +9,13 @@ import './fileManager.scss';
 import history from '../../../utils/history';
 import file from '../../../services/file';
 import localStorage from '../../../services/localStorage';
+import validate from '../../../services/validate';
 
 const FileManager = () => {
     const { confirm } = Modal;
 
     const [showHistoric, setShowHistoric] = useState(false);
+    const [historicData, setHistoricData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState(null);
 
@@ -71,6 +73,22 @@ const FileManager = () => {
         });
     }
 
+    async function getHistoric(item) {
+        if(historicData) setHistoricData(null);
+        setShowHistoric(true);
+        const username = localStorage.getUser().username;
+        let aux = username + "/";
+        let filename = item.replace(aux, "");
+        const response = await validate.get(username, filename);
+        if (response.status === 200) {
+            setHistoricData(response.data);
+        } else {
+            notification['error']({
+                message: response.data.message,
+            });
+        }
+    }
+
     return (
         <div className='file-manager-container'>
             <div className="page-header padding-page">
@@ -82,11 +100,11 @@ const FileManager = () => {
                     {data &&
                         <div className="card-list" >
                             {data.map(item =>
-                                <Card name={item} key={item} remove={() => deleteConfirm(item)} get={() => get(item)} historic={() => setShowHistoric(!showHistoric)} edit={() => history.push('/document')} />
+                                <Card name={item} key={item} remove={() => deleteConfirm(item)} get={() => get(item)} historic={() => getHistoric(item)} edit={() => history.push('/document')} />
                             )}
                         </div>
                     }
-                    {showHistoric && <Historic close={() => setShowHistoric(false)} />}
+                    {showHistoric && <Historic close={() => setShowHistoric(false)} data={historicData}/>}
                 </div>
             }
         </div>

@@ -1,4 +1,3 @@
-import { Upload } from 'antd';
 import api from './api';
 
 const file = {
@@ -55,4 +54,4 @@ const file = {
     }
 }
 
-export default file
+export default file;

@@ -32,7 +32,7 @@ public class ValidationService {
 	public Message validate(MultipartFile file, String motivo, String filename, String username)
 			throws NoSuchAlgorithmException, ValidcException, IOException {
 		HashFile hashFile = hashFileService.get(username + "/" + filename).orElseThrow(
-				() -> new EntityNotFoundException("file.not-found", "Arquivo" + filename + " não encontrado"));
+				() -> new EntityNotFoundException("file.not-found", "Arquivo " + filename + " não encontrado"));
 		String filename2 = fileStorageService.getFileName(file);
 		String hash = hashFileService.generateHash(username, filename2);
 		if (hash.equals(hashFile.getHash())) {
