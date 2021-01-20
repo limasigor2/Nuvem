@@ -33,7 +33,7 @@ import br.ufc.dc.validc.repository.UserRepository;
 import br.ufc.dc.validc.service.UserDetailsImpl;
 import br.ufc.dc.validc.util.JwtUtils;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
