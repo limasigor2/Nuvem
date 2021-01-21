@@ -19,6 +19,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<?> handleFileStorageException(EntityNotFoundException ex) {
 		return buildResponseEntity(ex);
 	}
+	
+	@ExceptionHandler(ValidcException.class)
+	protected ResponseEntity<?> handleValidcException(ValidcException ex) {
+		return buildResponseEntity(ex);
+	}
 
 	private ResponseEntity<?> buildResponseEntity(ValidcException validcException) {
 		return ResponseEntity.status(validcException.getStatus()).body(validcException.getMessageAsObject());
