@@ -42,6 +42,10 @@ public class User {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_phonenumber", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "phone_id"))
+	private Set<Phonenumber> phonenumbers = new HashSet<>();
 
 	public User() {
 	}
