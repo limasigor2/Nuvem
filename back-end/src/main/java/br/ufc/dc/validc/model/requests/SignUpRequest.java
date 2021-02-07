@@ -3,6 +3,8 @@ package br.ufc.dc.validc.model.requests;
 import java.util.Set;
 
 import javax.validation.constraints.*;
+
+import br.ufc.dc.validc.model.Phonenumber;
  
 public class SignUpRequest {
     @NotBlank
@@ -24,7 +26,7 @@ public class SignUpRequest {
     @Size(min = 6, max = 40)
     private String password;
     
-    
+    private Set<Phonenumber> phonenumbers;
   
     public String getUsername() {
         return username;
@@ -65,4 +67,15 @@ public class SignUpRequest {
     public void setRole(Set<String> role) {
       this.role = role;
     }
+
+	public Set<Phonenumber> getPhonenumbers() {
+		return phonenumbers;
+	}
+
+	public void setPhonenumbers(Set<Phonenumber> phonenumbers) {
+		this.phonenumbers = phonenumbers;
+	}
+
+	
+    
 }

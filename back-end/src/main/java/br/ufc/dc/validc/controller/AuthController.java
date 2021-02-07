@@ -23,11 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.ufc.dc.validc.model.ERole;
 import br.ufc.dc.validc.model.Message;
+import br.ufc.dc.validc.model.Phonenumber;
 import br.ufc.dc.validc.model.Role;
 import br.ufc.dc.validc.model.User;
 import br.ufc.dc.validc.model.requests.LoginRequest;
 import br.ufc.dc.validc.model.requests.SignUpRequest;
 import br.ufc.dc.validc.model.response.JwtResponse;
+import br.ufc.dc.validc.repository.PhonenumberRepository;
 import br.ufc.dc.validc.repository.RoleRepository;
 import br.ufc.dc.validc.repository.UserRepository;
 import br.ufc.dc.validc.service.UserDetailsImpl;
@@ -48,6 +50,9 @@ public class AuthController {
 
 	@Autowired
 	PasswordEncoder encoder;
+	
+	@Autowired
+	PhonenumberRepository phonenumberRepository;
 
 	@Autowired
 	JwtUtils jwtUtils;
@@ -65,12 +70,14 @@ public class AuthController {
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-
+		
 		return ResponseEntity.ok(new JwtResponse(jwt, 
 												 userDetails.getId(), 
 												 userDetails.getUsername(), 
 												 userDetails.getEmail(),
-												 roles));
+												 roles,
+												 userDetails.getPhonenumbers()
+												 ));
 	}
 
 	@PostMapping("/signup")
@@ -91,7 +98,8 @@ public class AuthController {
 		User user = new User(signUpRequest.getUsername(), 
 							 signUpRequest.getEmail(),
 							 encoder.encode(signUpRequest.getPassword()),
-							 signUpRequest.getName());
+							 signUpRequest.getName(),
+							 signUpRequest.getPhonenumbers());
 
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
@@ -102,7 +110,6 @@ public class AuthController {
 			roles.add(userRole);
 		} else {
 			strRoles.forEach(role -> {
-				System.out.print(role);
 				
 				switch (role) {
 				case "admin":
@@ -121,6 +128,7 @@ public class AuthController {
 
 		user.setRoles(roles);
 		user.generateExternalId();
+		phonenumberRepository.saveAll(user.getPhonenumbers());
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new Message("User registered successfully!", "key"));
