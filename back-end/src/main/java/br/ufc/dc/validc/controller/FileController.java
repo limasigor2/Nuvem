@@ -1,6 +1,5 @@
 package br.ufc.dc.validc.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
@@ -22,8 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.ufc.dc.validc.exception.ValidcException;
 import br.ufc.dc.validc.model.response.UploadFileResponse;
-import br.ufc.dc.validc.service.AwsClient;
-import br.ufc.dc.validc.service.FileStorageService;
+import br.ufc.dc.validc.service.GoogleCloudStorageClient;
 import br.ufc.dc.validc.service.HashFileService;
 import br.ufc.dc.validc.service.UserDetailsImpl;
 
@@ -37,60 +35,60 @@ import javax.servlet.http.HttpServletRequest;
 @CrossOrigin("*")
 public class FileController {
 
-	@Autowired
-	private FileStorageService fileStorageService;
-	
+//	@Autowired
+//	private FileStorageService fileStorageService;
+
 	@Autowired
 	private HashFileService hashFileservice;
-	
+
 	@Autowired
-	private AwsClient awsClient;
+	private GoogleCloudStorageClient googleCloudStorageClient;
 
 	@PostMapping("/upload")
 	public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file)
 			throws IllegalStateException, IOException, NoSuchAlgorithmException, ValidcException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
-		String fileName = fileStorageService.getFileName(file);
-		File file2 = fileStorageService.multipartToFile(file);
-		awsClient.send(file2, userName, fileName);
-		String hashValue = hashFileservice.save(file, userName, fileName);
-		return new UploadFileResponse(fileName, file.getContentType(), file.getSize(), hashValue);
+		String username = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
+//		String fileName = fileStorageService.getFileName(file);
+//		File file2 = fileStorageService.multipartToFile(file);
+		googleCloudStorageClient.uploadObject(file, username);
+
+//		String hashValue = hashFileservice.save(file, userName, fileName);
+		return new UploadFileResponse(file.getOriginalFilename(), file.getContentType(), file.getSize(), "hashValue");
 	}
 
-	@GetMapping("/download/{fileName:.+}")
-	public ResponseEntity<?> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws Exception {
+	@GetMapping("/download/{filename:.+}")
+	public ResponseEntity<?> downloadFile(@PathVariable String filename, HttpServletRequest request) throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
-		byte[] bytes = awsClient.get(userName, fileName);
+		String username = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
+		byte[] bytes = googleCloudStorageClient.get(username, filename);
 
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setContentType(contentType(fileName));
+		httpHeaders.setContentType(contentType(filename));
 		httpHeaders.setContentLength(bytes.length);
 		httpHeaders.setContentDispositionFormData("attachment",
-				URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20"));
+				URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20"));
 
 		return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
 	}
 
-	
-	@DeleteMapping("/delete/{fileName:.+}")
-	public ResponseEntity<?> delete(@PathVariable String fileName, HttpServletRequest request) throws Exception {
+	@DeleteMapping("/delete/{filename:.+}")
+	public ResponseEntity<?> delete(@PathVariable String filename, HttpServletRequest request) throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
-		awsClient.delete(userName, fileName);
-		hashFileservice.delete(userName, fileName);
-		return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+		String username = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
+		googleCloudStorageClient.deleteObject(filename, username);
+		hashFileservice.delete(filename, username);
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
-	
+
 	@GetMapping("/list")
-	public ResponseEntity<?> list() throws ValidcException{
+	public ResponseEntity<?> list() throws ValidcException, IOException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String userName = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
-		awsClient.list(userName);
-		return ResponseEntity.status(HttpStatus.OK).body(awsClient.list(userName));
+
+		return ResponseEntity.status(HttpStatus.OK).body(googleCloudStorageClient.list(userName));
 	}
-	
+
 	private MediaType contentType(String keyname) {
 		String[] arr = keyname.split("\\.");
 		String type = arr[arr.length - 1];
