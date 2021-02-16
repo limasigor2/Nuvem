@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
-//import org.aspectj.weaver.patterns.HasThisTypePatternTriedToSneakInSomeGenericOrParameterizedTypePatternMatchingStuffAnywhereVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.ufc.dc.validc.model.ERole;
 import br.ufc.dc.validc.model.Message;
-import br.ufc.dc.validc.model.Phonenumber;
 import br.ufc.dc.validc.model.Role;
 import br.ufc.dc.validc.model.User;
 import br.ufc.dc.validc.model.requests.LoginRequest;
