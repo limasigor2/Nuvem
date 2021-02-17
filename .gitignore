@@ -42,5 +42,5 @@ back-end/secrets.yml
 back-end/.gradletasknamecache
 back-end/.sts4-cache
 back-end/src/main/resources/application.properties
-back-end/src/main/resources/validc-327271341f5a.json
+back-end/src/main/resources/*.json
 back-end/src/main/resources/validc.json
