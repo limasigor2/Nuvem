@@ -3,7 +3,6 @@ package br.ufc.dc.validc.service;
 import com.google.cloud.storage.Bucket;
 import com.google.api.gax.paging.Page;
 
-import com.google.auth.oauth2.GoogleCredentials;
 
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
@@ -11,7 +10,6 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 

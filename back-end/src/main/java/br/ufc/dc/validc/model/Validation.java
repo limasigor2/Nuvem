@@ -2,36 +2,20 @@ package br.ufc.dc.validc.model;
 
 import java.time.LocalDateTime;
 
+import br.ufc.dc.validc.util.UUIDGenerator;
 
-import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity;
-import org.springframework.cloud.gcp.data.datastore.core.mapping.Field;
-import org.springframework.data.annotation.Id;
-//import com.google.cloud.spring.data.datastore.core.mapping.Entity;
-//import org.springframework.data.annotation.Id
-
-
-
-//@Entity(name = "infovalidation")
-@Entity(name = "validation")
 public class Validation {
 
-	@Id
-	@Field(name = "validation_id")
 	private String id;
-	
-	@Field(name = "createdAt")
+
 	private String createdAt;
-	
-	@Field(name = "motivo")
+
 	private String motivo;
-	
-	@Field(name = "isValid")
+
 	private boolean isValid;
-	
-	@Field(name = "filename")
+
 	private String filename;
-	
-	@Field(name = "username")
+
 	private String username;
 
 	public Validation() {
@@ -44,8 +28,8 @@ public class Validation {
 		this.isValid = isValid;
 		this.filename = filename;
 		this.username = username;
+		this.generateId();
 	}
-
 
 	public String getId() {
 		return id;
@@ -62,11 +46,10 @@ public class Validation {
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt.toString();
 	}
-	
+
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
-	
 
 	public String getMotivo() {
 		return motivo;
@@ -84,7 +67,6 @@ public class Validation {
 		this.isValid = isValid;
 	}
 
-	
 	public String getFilename() {
 		return filename;
 	}
@@ -93,7 +75,6 @@ public class Validation {
 		this.filename = filename;
 	}
 
-	
 	public String getUsername() {
 		return username;
 	}
@@ -108,5 +89,8 @@ public class Validation {
 				+ ", filename=" + filename + ", username=" + username + "]";
 	}
 
-	
+	public void generateId() {
+		setId(UUIDGenerator.getHashFromString(LocalDateTime.now().toString()));
+	}
+
 }
