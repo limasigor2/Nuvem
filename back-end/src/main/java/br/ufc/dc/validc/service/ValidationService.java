@@ -3,16 +3,12 @@ package br.ufc.dc.validc.service;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.google.cloud.datastore.Datastore;
-import com.google.cloud.datastore.DatastoreOptions;
 
 import br.ufc.dc.validc.exception.EntityNotFoundException;
 import br.ufc.dc.validc.exception.ValidcException;
@@ -30,7 +26,7 @@ public class ValidationService {
 	@Autowired
 	private ValidationRepository validationRepository;
 
-	Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+//	Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
 	public Message validate(MultipartFile file, String motivo, String filename, String username)
 			throws NoSuchAlgorithmException, ValidcException, IOException {

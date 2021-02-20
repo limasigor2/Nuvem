@@ -1,15 +1,14 @@
 package br.ufc.dc.validc.repository;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import com.google.cloud.datastore.Query;
 import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
@@ -18,11 +17,13 @@ import com.google.cloud.datastore.Key;
 
 import br.ufc.dc.validc.model.Validation;
 
-@Repository
+@Component
 public class ValidationRepository {
 
-	Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+	@Value("${cloud.google.project-id}")
+	private String projectId;
 
+	Datastore datastore = DatastoreOptions.newBuilder().setProjectId(projectId).build().getService();
 
 	public void save(Validation infoValidation) {
 		Key validationKey = datastore.newKeyFactory().setKind(Validation.class.getCanonicalName())
@@ -43,8 +44,7 @@ public class ValidationRepository {
 		QueryResults<Entity> results = datastore.run(query);
 		List<Validation> infos = new ArrayList<>();
 		while (results.hasNext()) {
-			
-			
+
 			Entity entity = results.next();
 			Validation validation = new Validation();
 			validation.setCreatedAt(entity.getString("createdAt"));
@@ -57,7 +57,7 @@ public class ValidationRepository {
 
 		}
 		System.out.println(infos.size());
-		
+
 		return infos;
 	}
 }
