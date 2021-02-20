@@ -53,10 +53,7 @@ public class ValidationService {
 	}
 
 	public List<Validation> listValidations(String username, String filename) {
-		List<Validation> infos = new ArrayList<>();
-
-		validationRepository.list(username, filename);
-//		infos.addAll(dynamoDbService.list(username, filename));
+		List<Validation> infos = validationRepository.list(username, filename);
 		return infos;
 	}
 
