@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, notification } from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Form, Input, Button, notification, Tooltip} from 'antd';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
 import './register.scss';
 import auth from '../../services/auth';
@@ -30,7 +30,7 @@ const Register = () => {
             phones.push(phone)
         }
 
-        const response = await auth.register({...values, phones: phones});
+        const response = await auth.register({ ...values, phones: phones });
         if (response.status === 200) {
             notification['success']({
                 message: 'Cadastro realizado com sucesso',
@@ -77,7 +77,6 @@ const Register = () => {
                 >
                     <Input disabled={disabled} />
                 </Form.Item>
-
                 <Form.List
                     name="phones"
                     rules={[
@@ -92,54 +91,49 @@ const Register = () => {
                 >
                     {(fields, { add, remove }, { errors }) => (
                         <>
-                            {fields.map((field, index) => (
-                                <Form.Item
-                                    label={index === 0 ? "Telefone(s)" : ""}
-                                    required={true}
-                                    key={field.key}
-                                >
-                                    <Form.Item
-                                        {...field}
-                                        validateTrigger={['onChange', 'onBlur']}
-                                        rules={[
-                                            {
-                                                required: true,
-                                                whitespace: true,
-                                                message: "Por favor, adicione um telefone",
-                                            },
-                                            {
-                                                pattern: '\\([0-9]{2}\\) [0-9]{5}-[0-9]{4}',
-                                                message: "Por favor, adicione um número de telefone válido",
-                                            }
+                            {
+                                fields.map((field, index) => (
+                                    <div className={fields.length > 1 ? 'form-dynamic' : ''}>
+                                        <Form.Item
+                                            label={index === 0 ? "Telefone(s)" : ""}
+                                            required={true}
+                                            key={field.key}
+                                        >
+                                            {fields.length > 1 ? (
+                                                <Button shape="circle" icon={<MinusOutlined />} disabled={disabled} onClick={() => remove(field.name)} />
+                                            ) : null}
+                                            <Form.Item
+                                                {...field}
+                                                validateTrigger={['onChange', 'onBlur']}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        whitespace: true,
+                                                        message: "Por favor, adicione um telefone",
+                                                    },
+                                                    {
+                                                        pattern: '\\([0-9]{2}\\) [0-9]{5}-[0-9]{4}',
+                                                        message: "Por favor, adicione um número de telefone válido. Formato: (85) 99999-9999",
+                                                    }
 
-                                        ]}
-                                        noStyle
-                                    >
-                                        <Input placeholder="(85) 99999-9999" disabled={disabled} />
-                                    </Form.Item>
-                                    {fields.length > 1 ? (
-                                        <MinusCircleOutlined
-                                            className="dynamic-delete-button"
-                                            onClick={() => remove(field.name)}
-                                            disabled={disabled}
-                                        />
-                                    ) : null}
-                                </Form.Item>
-                            ))}
-                            <Form.Item>
-                                <Button
-                                    onClick={() => add()}
-                                    style={{ width: '60%' }}
-                                    icon={<PlusOutlined />}
-                                    disabled={disabled}
-                                >
-                                </Button>
+                                                ]}
+                                                noStyle
+                                            >
+                                                <Input placeholder="(85) 99999-9999" disabled={disabled} />
+                                            </Form.Item>
+                                        </Form.Item>
+                                    </div>
+                                ))
+                            }
+                            <Form.Item className="dynamic-form-button">
+                                <Tooltip title="Adicionar outro telefone">
+                                    <Button shape="circle" icon={<PlusOutlined />} disabled={disabled} onClick={() => add()} />
+                                </Tooltip>
                                 <Form.ErrorList errors={errors} />
                             </Form.Item>
                         </>
                     )}
                 </Form.List>
-
                 <Form.Item
                     label="Senha"
                     name="password"
@@ -159,7 +153,7 @@ const Register = () => {
                     </Form.Item>
                 </div>
             </Form>
-        </div>
+        </div >
     )
 }
 
