@@ -43,6 +43,7 @@ const Register = () => {
                 name="basic"
                 onFinish={onFinish}
                 layout={'vertical'}
+                initialValues={{ phones: [""] }}
             >
                 <h1>Cadastrar usuário</h1>
                 <Form.Item
@@ -83,38 +84,40 @@ const Register = () => {
                 >
                     {(fields, { add, remove }, { errors }) => (
                         <>
-                            {fields.map((field, index) => (
-                                <div className={fields.length > 1 ? 'form-dynamic' : ''}>
-                                    <Form.Item
-                                        label={index === 0 ? "Telefone(s)" : ""}
-                                        required={true}
-                                        key={field.key}
-                                    >
-                                        {fields.length > 1 ? (
-                                            <Button shape="circle" icon={<MinusOutlined />} disabled={disabled} onClick={() => remove(field.name)} />
-                                        ) : null}
+                            {
+                                fields.map((field, index) => (
+                                    <div className={fields.length > 1 ? 'form-dynamic' : ''}>
                                         <Form.Item
-                                            {...field}
-                                            validateTrigger={['onChange', 'onBlur']}
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    whitespace: true,
-                                                    message: "Por favor, adicione um telefone",
-                                                },
-                                                {
-                                                    pattern: '\\([0-9]{2}\\) [0-9]{5}-[0-9]{4}',
-                                                    message: "Por favor, adicione um número de telefone válido. Formato: (85) 99999-9999",
-                                                }
-
-                                            ]}
-                                            noStyle
+                                            label={index === 0 ? "Telefone(s)" : ""}
+                                            required={true}
+                                            key={field.key}
                                         >
-                                            <Input placeholder="(85) 99999-9999" disabled={disabled} />
+                                            {fields.length > 1 ? (
+                                                <Button shape="circle" icon={<MinusOutlined />} disabled={disabled} onClick={() => remove(field.name)} />
+                                            ) : null}
+                                            <Form.Item
+                                                {...field}
+                                                validateTrigger={['onChange', 'onBlur']}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        whitespace: true,
+                                                        message: "Por favor, adicione um telefone",
+                                                    },
+                                                    {
+                                                        pattern: '\\([0-9]{2}\\) [0-9]{5}-[0-9]{4}',
+                                                        message: "Por favor, adicione um número de telefone válido. Formato: (85) 99999-9999",
+                                                    }
+
+                                                ]}
+                                                noStyle
+                                            >
+                                                <Input placeholder="(85) 99999-9999" disabled={disabled} />
+                                            </Form.Item>
                                         </Form.Item>
-                                    </Form.Item>
-                                </div>
-                            ))}
+                                    </div>
+                                ))
+                            }
                             <Form.Item className="dynamic-form-button">
                                 <Tooltip title="Adicionar outro telefone">
                                     <Button shape="circle" icon={<PlusOutlined />} disabled={disabled} onClick={() => add()} />

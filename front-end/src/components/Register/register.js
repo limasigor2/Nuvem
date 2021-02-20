@@ -77,6 +77,7 @@ const Register = () => {
                 >
                     <Input disabled={disabled} />
                 </Form.Item>
+                
                 <Form.List
                     name="phones"
                     rules={[
