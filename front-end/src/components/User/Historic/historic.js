@@ -7,12 +7,27 @@ import './historic.scss'
 const Historic = ({ close, data }) => {
 
     const card = (data, status, justificative) => {
+
+        const date = new Date(data);
+
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+
+        const formatted = `${day}/${month}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+
         return (
             <div className="historic-card">
-                <span>{data}</span>
+                <div className="date"><span>{formatted}</span></div>
                 <div className="validation-data">
                     {
-                        status === true ? <CheckCircleOutlined /> : <CloseCircleOutlined />
+                        status === true ?
+                            <div className="valid">
+                                <CheckCircleOutlined />
+                            </div>
+                            :
+                            <div className="invalid">
+                                <CloseCircleOutlined />
+                            </div>
                     }
                     <p>
                         {justificative}
