@@ -16,7 +16,7 @@ public class HashFile {
 	private Long id;
 
 	@Column
-	private String fileName;
+	private String filename;
 
 	@Column
 	private String hash;
@@ -27,7 +27,7 @@ public class HashFile {
 
 	public HashFile(String fileName, String hash) {
 		super();
-		this.fileName = fileName;
+		this.filename = fileName;
 		this.hash = hash;
 	}
 
@@ -39,12 +39,12 @@ public class HashFile {
 		this.id = id;
 	}
 
-	public String getFileName() {
-		return fileName;
+	public String getFilename() {
+		return filename;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setFilename(String fileName) {
+		this.filename = fileName;
 	}
 
 	public String getHash() {
@@ -57,7 +57,7 @@ public class HashFile {
 
 	@Override
 	public String toString() {
-		return "HashFile [id=" + id + ", fileName=" + fileName + ", hash=" + hash + "]";
+		return "HashFile [id=" + id + ", fileName=" + filename + ", hash=" + hash + "]";
 	}
 	
 	

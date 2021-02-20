@@ -37,7 +37,6 @@ public class GoogleCloudStorageClient {
 
 	public void deleteObject(String filename, String username) throws IOException {
 
-		System.out.println(bucketName + "\t" + username + "/" + filename);
 		storage.delete(bucketName, username + "/" + filename);
 	}
 

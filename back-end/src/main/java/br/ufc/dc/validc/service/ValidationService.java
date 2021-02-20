@@ -26,12 +26,12 @@ public class ValidationService {
 	@Autowired
 	private ValidationRepository validationRepository;
 
-//	Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-
 	public Message validate(MultipartFile file, String motivo, String filename, String username)
 			throws NoSuchAlgorithmException, ValidcException, IOException {
+
 		HashFile hashFile = hashFileService.get(username + "/" + filename).orElseThrow(
 				() -> new EntityNotFoundException("file.not-found", "Arquivo " + filename + " não encontrado"));
+		
 		String hash = hashFileService.generateHash(username, filename);
 		if (hash.equals(hashFile.getHash())) {
 			Validation infoValidation = new Validation(LocalDateTime.now(), motivo, true, filename, username);
@@ -51,6 +51,16 @@ public class ValidationService {
 	public List<Validation> listValidations(String username, String filename) {
 		List<Validation> infos = validationRepository.list(username, filename);
 		return infos;
+	}
+	
+	public void delete(String username, String filename) {
+		System.out.println("DELETE VALIDATION");
+		System.out.println(username + "/" + filename);
+		listValidations(username, filename).forEach(validation -> {
+			System.out.println(validation.getClass());
+			
+			validationRepository.delete(validation);
+		});
 	}
 
 }

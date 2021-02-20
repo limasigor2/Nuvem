@@ -36,6 +36,13 @@ public class ValidationRepository {
 
 	}
 
+	public void delete(Validation validation) {
+
+		Key validationKey = datastore.newKeyFactory().setKind(Validation.class.getCanonicalName())
+				.newKey(validation.getId());
+		datastore.delete(validationKey);
+	}
+
 	public List<Validation> list(String username, String filename) {
 
 		Query<Entity> query = Query.newEntityQueryBuilder().setKind(Validation.class.getCanonicalName())
@@ -44,7 +51,6 @@ public class ValidationRepository {
 		QueryResults<Entity> results = datastore.run(query);
 		List<Validation> infos = new ArrayList<>();
 		while (results.hasNext()) {
-
 			Entity entity = results.next();
 			Validation validation = new Validation();
 			validation.setCreatedAt(entity.getString("createdAt"));
@@ -52,13 +58,11 @@ public class ValidationRepository {
 			validation.setFilename(entity.getString("filename"));
 			validation.setIsValid(entity.getBoolean("isValid"));
 			validation.setUsername(entity.getString("username"));
+			validation.setId(entity.getKey().getName());
 			infos.add(validation);
-			System.out.println(entity);
 
 		}
-		System.out.println(infos.size());
 
 		return infos;
 	}
 }
-

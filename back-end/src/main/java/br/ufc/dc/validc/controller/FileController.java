@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.ufc.dc.validc.exception.ValidcException;
+import br.ufc.dc.validc.model.Message;
 import br.ufc.dc.validc.model.response.UploadFileResponse;
 import br.ufc.dc.validc.service.GoogleCloudStorageClient;
 import br.ufc.dc.validc.service.HashFileService;
 import br.ufc.dc.validc.service.UserDetailsImpl;
+import br.ufc.dc.validc.service.ValidationService;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,24 +37,24 @@ import javax.servlet.http.HttpServletRequest;
 @CrossOrigin("*")
 public class FileController {
 
-//	@Autowired
-//	private FileStorageService fileStorageService;
-
 	@Autowired
 	private HashFileService hashFileservice;
 
 	@Autowired
 	private GoogleCloudStorageClient googleCloudStorageClient;
+	
+	@Autowired
+	private ValidationService validationService;
 
 	@PostMapping("/upload")
 	public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file)
 			throws IllegalStateException, IOException, NoSuchAlgorithmException, ValidcException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
-//		String fileName = fileStorageService.getFileName(file);
-//		File file2 = fileStorageService.multipartToFile(file);
-		googleCloudStorageClient.uploadObject(file, username);
 
+		googleCloudStorageClient.uploadObject(file, username);
+		validationService.delete(username, file.getOriginalFilename());
+		hashFileservice.delete(file.getOriginalFilename(), username);
 		String hashValue = hashFileservice.save(file, username, file.getOriginalFilename());
 		return new UploadFileResponse(file.getOriginalFilename(), file.getContentType(), file.getSize(), hashValue);
 	}
@@ -68,7 +70,6 @@ public class FileController {
 		httpHeaders.setContentLength(bytes.length);
 		httpHeaders.setContentDispositionFormData("attachment",
 				URLEncoder.encode(filename, "UTF-8").replaceAll("\\+", "%20"));
-
 		return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
 	}
 
@@ -78,7 +79,10 @@ public class FileController {
 		String username = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
 		googleCloudStorageClient.deleteObject(filename, username);
 		hashFileservice.delete(filename, username);
-		return ResponseEntity.status(HttpStatus.OK).build();
+		validationService.delete(username, filename);
+		// TODO se não existir enviar msg de erro
+		Message msg = new Message("Arquivo deletado com sucesso", "file.delete");
+		return ResponseEntity.status(HttpStatus.OK).body(msg);
 	}
 
 	@GetMapping("/list")

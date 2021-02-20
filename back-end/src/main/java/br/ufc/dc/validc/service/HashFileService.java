@@ -22,23 +22,26 @@ public class HashFileService {
 	private HashFileRepository repository;
 	
 
-	public String save(MultipartFile file, String username, String fileName)
+	@Transactional
+	public String save(MultipartFile file, String username, String filename)
 			throws NoSuchAlgorithmException, IOException {
 
-		String hashValue = this.generateHash(username, fileName);
-
-		HashFile hashFile = new HashFile(username + '/' + fileName, hashValue);
+		String hashValue = this.generateHash(username, filename);
+		HashFile hashFile = new HashFile(username + '/' + filename, hashValue);
+		this.delete(filename, username);
 		repository.save(hashFile);
 		return hashValue;
 	}
 
 	@Transactional
-	public void delete(String username, String filename) {
-		repository.deleteByFileName(username + "/" + filename);
+	public void delete(String filename, String username) {
+		
+		repository.deleteByFilename(username + "/" + filename);
 	}
 
 	public Optional<HashFile> get(String filename) {
-		return repository.findByFileName(filename);
+		System.out.println(filename);
+		return repository.findByFilename(filename);
 	}
 
 	public String generateHash(String username, String filename) throws NoSuchAlgorithmException, IOException {
