@@ -5,6 +5,7 @@ import history from '../../../utils/history';
 
 import './list.scss';
 import user from '../../../services/user';
+import localStorage from '../../../services/localStorage';
 
 const List = () => {
     const { confirm } = Modal;
@@ -15,12 +16,23 @@ const List = () => {
         size: 10,
     });
     const [loading, setLoading] = useState(false);
+    const { username } = localStorage.getUser();
 
     async function fetchData(page, size) {
         setLoading(true);
         const response = await user.list(page, size);
+
         if (response.status === 200) {
-            setData(response.data);
+            const { data } = response;
+
+            let aux = [];
+            for (let i = 0; i < data.length; i++) {
+                if ( data[i].username !== username){
+                    aux.push(data[i]);
+                }
+            }
+
+            setData(aux);
             setLoading(false);
         } else {
             setLoading(false);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, notification} from 'antd';
+import { Form, Input, Button, notification, Tooltip} from 'antd';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
 import history from '../../../utils/history';
 import userService from '../../../services/user';
@@ -37,7 +38,16 @@ const Edit = () => {
         if (history.location.state.user) {
             setUser(history.location.state.user);
             let data = history.location.state.user;
-            form.setFieldsValue({ name: data.name, username: data.username, email: data.email })
+            console.log(data);
+            let phones = [];
+
+            for (let i = 0; i < data.phonenumbers.length; i++) {
+                let aux = data.phonenumbers[i];
+                let phone = `(${aux.ddd}) ${aux.number}`
+                phones.push(phone);
+            }
+
+            form.setFieldsValue({ name: data.name, username: data.username, email: data.email, phonenumbers: phones });
         } else {
             history.push("/admin");
         };
@@ -75,7 +85,65 @@ const Edit = () => {
                 >
                     <Input disabled={disabled} />
                 </Form.Item>
-                <div className="inline">
+
+                <Form.List
+                    label="Telefone(s)"
+                    name="phonenumbers"
+                    rules={[
+                        {
+                            validator: async (_, phones) => {
+                                if (!phones || phones.length < 1) {
+                                    return Promise.reject(new Error('Por favor, adicione um telefone'));
+                                }
+                            },
+                        },
+                    ]}
+                >
+                    {(fields, { add, remove }, { errors }) => (
+                        <>
+                            {fields.map((field, index) => (
+                                <div className={fields.length > 1 ? 'form-dynamic' : ''}>
+                                    <Form.Item
+                                        label={index === 0 ? "Telefone(s)" : ""}
+                                        required={true}
+                                        key={field.key}
+                                    >
+                                        {fields.length > 1 ? (
+                                            <Button shape="circle" icon={<MinusOutlined />} disabled={disabled} onClick={() => remove(field.name)} />
+                                        ) : null}
+                                        <Form.Item
+                                            {...field}
+                                            validateTrigger={['onChange', 'onBlur']}
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    whitespace: true,
+                                                    message: "Por favor, adicione um telefone",
+                                                },
+                                                {
+                                                    pattern: '\\([0-9]{2}\\) [0-9]{5}-[0-9]{4}',
+                                                    message: "Por favor, adicione um número de telefone válido. Formato: (85) 99999-9999",
+                                                }
+
+                                            ]}
+                                            noStyle
+                                        >
+                                            <Input placeholder="(85) 99999-9999" disabled={disabled} />
+                                        </Form.Item>
+                                    </Form.Item>
+                                </div>
+                            ))}
+                            <Form.Item className="dynamic-form-button">
+                                <Tooltip title="Adicionar outro telefone">
+                                    <Button shape="circle" icon={<PlusOutlined />} disabled={disabled} onClick={() => add()} />
+                                </Tooltip>
+                                <Form.ErrorList errors={errors} />
+                            </Form.Item>
+                        </>
+                    )}
+                </Form.List>
+
+                <div className="inline" style={{marginTop: 20}}>
                     <Button type="link" disabled={disabled} onClick={() => history.push("/admin")} className='no-padding-left'>
                         Cancelar
                     </Button>

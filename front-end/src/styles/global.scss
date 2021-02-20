@@ -69,3 +69,26 @@
     margin-top: 20px;
     text-align: center;
 }
+
+.form-dynamic{
+    .ant-form-item{
+        margin-bottom: 10px;
+    }
+    .ant-form-item-control-input{
+        display: block!important;
+        .ant-form-item-control-input-content{
+            display: flex;
+            input{
+                margin-left: 10px;
+            }
+        }
+    }
+}
+
+.dynamic-form-button{
+    margin-bottom: 10px;
+    .ant-form-item-control{
+        justify-content: flex-end;
+        flex-direction: row;
+    }
+}

@@ -18,7 +18,7 @@ const auth = {
 
     async register(values) {
         try {
-            const response = await api.post('/api/auth/signup', { username: values.id, name: values.name, email: values.email, password: values.password });
+            const response = await api.post('/api/auth/signup', { username: values.id, name: values.name, email: values.email, password: values.password, phonenumbers: values.phones});
             return response;
         } catch (responseError) {
             const { response } = responseError

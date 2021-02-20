@@ -20,15 +20,26 @@
     width: 100%;
     border-bottom: 1px solid #ccc;
     padding: 8px 15px;
+    .date{
+        span{
+            font-size: 14px;
+        }
+    }
     .validation-data{
         display: flex;
         align-items: center;
-        span{
-            font-size: 20px;
+        font-size: 24px;
+        .valid{
+            color: #3cba54;
+        }
+        .invalid{
+            color: #db3236;
         }
         p{
             margin-bottom: 0;
             margin-left: 10px;
+            font-size: 16px;
+            font-weight: 500;
         }
     }
 }
