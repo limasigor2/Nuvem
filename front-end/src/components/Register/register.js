@@ -21,23 +21,28 @@ const Register = () => {
     const onFinish = async (values) => {
         setDisabled(true);
         setLoading(true);
-        console.log(values);
-        console.log(values.phones[0].split(/\(|\) /));
 
+        let phones = [];
 
-        // const response = await auth.register(values);
-        // if (response.status === 200) {
-        //     notification['success']({
-        //         message: 'Cadastro realizado com sucesso',
-        //     });
-        //     history.push('/');
-        // } else {
-        //     setDisabled(false);
-        //     setLoading(false);
-        //     notification['error']({
-        //         message: response.data.message,
-        //     });
-        // }
+        for (let i = 0; i < values.phones.length; i++) {
+            let aux = values.phones[i].split(/\(|\) /);
+            let phone = { ddd: aux[1], number: aux[2] }
+            phones.push(phone)
+        }
+
+        const response = await auth.register({...values, phones: phones});
+        if (response.status === 200) {
+            notification['success']({
+                message: 'Cadastro realizado com sucesso',
+            });
+            history.push('/');
+        } else {
+            setDisabled(false);
+            setLoading(false);
+            notification['error']({
+                message: response.data.message,
+            });
+        }
     };
 
     return (
@@ -104,7 +109,7 @@ const Register = () => {
                                             },
                                             {
                                                 pattern: '\\([0-9]{2}\\) [0-9]{5}-[0-9]{4}',
-                                                message: "Por favor, adicione um número de telefone teste",
+                                                message: "Por favor, adicione um número de telefone válido",
                                             }
 
                                         ]}
@@ -116,7 +121,7 @@ const Register = () => {
                                         <MinusCircleOutlined
                                             className="dynamic-delete-button"
                                             onClick={() => remove(field.name)}
-                                            disabled={disabled} 
+                                            disabled={disabled}
                                         />
                                     ) : null}
                                 </Form.Item>
@@ -126,7 +131,7 @@ const Register = () => {
                                     onClick={() => add()}
                                     style={{ width: '60%' }}
                                     icon={<PlusOutlined />}
-                                    disabled={disabled} 
+                                    disabled={disabled}
                                 >
                                 </Button>
                                 <Form.ErrorList errors={errors} />

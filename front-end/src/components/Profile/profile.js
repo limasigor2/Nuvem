@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, notification } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 import userService from '../../services/user';
 import localStorage from '../../services/localStorage';
@@ -21,7 +22,16 @@ const Profile = () => {
         const { data } = response;
         if (response.status === 200) {
             setUser(data);
-            form.setFieldsValue({ name: data.name, username: data.username, email: data.email });
+
+            let phones = [];
+
+            for (let i = 0; i < data.phonenumbers.length; i++) {
+                let aux = data.phonenumbers[i];
+                let phone = `(${aux.ddd}) ${aux.number}`
+                phones.push(phone);
+            }
+
+            form.setFieldsValue({ name: data.name, username: data.username, email: data.email, phonenumbers: phones });
             setDisabled(false);
         }
         else {
@@ -35,12 +45,26 @@ const Profile = () => {
     useEffect(() => { getUser(); }, [])
 
     const onFinish = async (values) => {
+
         setDisabled(true);
         setLoading(true);
+
+        let phones = [];
+        let phoneNumbers = user.phonenumbers;
+
+        for (let i = 0; i < values.phonenumbers.length; i++) {
+            let id = phoneNumbers[i].id;
+            let aux = values.phonenumbers[i].split(/\(|\) /);
+            let phone = { id: id, ddd: aux[1], number: aux[2] }
+            phones.push(phone)
+        }
+
         const response = await userService.put({
             ...values,
-            externalId: user.externalId
+            externalId: user.externalId,
+            phonenumbers: phones
         });
+
         const { data } = response;
         if (response.status === 200) {
             localStorage.update(data.email, data.username);
@@ -87,6 +111,69 @@ const Profile = () => {
                 >
                     <Input disabled={disabled} />
                 </Form.Item>
+
+                <Form.List
+                    label="Telefone(s)"
+                    name="phonenumbers"
+                    rules={[
+                        {
+                            validator: async (_, phones) => {
+                                if (!phones || phones.length < 1) {
+                                    return Promise.reject(new Error('Por favor, adicione um telefone'));
+                                }
+                            },
+                        },
+                    ]}
+                >
+                    {(fields, { add, remove }, { errors }) => (
+                        <>
+                            {fields.map((field, index) => (
+                                <Form.Item
+                                    label={index === 0 ? "Telefone(s)" : ""}
+                                    required={true}
+                                    key={field.key}
+                                >
+                                    <Form.Item
+                                        {...field}
+                                        validateTrigger={['onChange', 'onBlur']}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                whitespace: true,
+                                                message: "Por favor, adicione um telefone",
+                                            },
+                                            {
+                                                pattern: '\\([0-9]{2}\\) [0-9]{5}-[0-9]{4}',
+                                                message: "Por favor, adicione um número de telefone válido",
+                                            }
+
+                                        ]}
+                                        noStyle
+                                    >
+                                        <Input placeholder="(85) 99999-9999" disabled={disabled} />
+                                    </Form.Item>
+                                    {fields.length > 1 ? (
+                                        <MinusCircleOutlined
+                                            className="dynamic-delete-button"
+                                            onClick={() => remove(field.name)}
+                                            disabled={disabled}
+                                        />
+                                    ) : null}
+                                </Form.Item>
+                            ))}
+                            <Form.Item>
+                                <Button
+                                    onClick={() => add()}
+                                    style={{ width: '60%' }}
+                                    icon={<PlusOutlined />}
+                                    disabled={disabled}
+                                >
+                                </Button>
+                                <Form.ErrorList errors={errors} />
+                            </Form.Item>
+                        </>
+                    )}
+                </Form.List>
 
                 <Form.Item
                     label="Senha"
