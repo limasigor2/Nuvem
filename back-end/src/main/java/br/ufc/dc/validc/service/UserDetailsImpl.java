@@ -3,6 +3,7 @@ package br.ufc.dc.validc.service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -11,10 +12,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.ufc.dc.validc.model.Phonenumber;
 import br.ufc.dc.validc.model.User;
 
 public class UserDetailsImpl implements UserDetails {
-	
 
 	/**
 	 * 
@@ -27,13 +28,16 @@ public class UserDetailsImpl implements UserDetails {
 
 	private String email;
 
+	private Set<Phonenumber> phonenumbers;
+
 	@JsonIgnore
 	private String password;
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(Long id, String username, String email, String password,
-			Collection<? extends GrantedAuthority> authorities) {
+	public UserDetailsImpl(Long id, String username, String email, String password, 
+			Collection<? extends GrantedAuthority> authorities, Set<Phonenumber> phonenumbers) {
+		this.phonenumbers = phonenumbers;
 		this.id = id;
 		this.username = username;
 		this.email = email;
@@ -43,15 +47,10 @@ public class UserDetailsImpl implements UserDetails {
 
 	public static UserDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
-				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
-				.collect(Collectors.toList());
+				.map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 
-		return new UserDetailsImpl(
-				user.getId(), 
-				user.getUsername(), 
-				user.getEmail(),
-				user.getPassword(), 
-				authorities);
+		return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), authorities,
+				user.getPhonenumbers());
 	}
 
 	@Override
@@ -75,6 +74,14 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public String getUsername() {
 		return username;
+	}
+
+	public Set<Phonenumber> getPhonenumbers() {
+		return phonenumbers;
+	}
+
+	public void setPhonenumbers(Set<Phonenumber> phonenumbers) {
+		this.phonenumbers = phonenumbers;
 	}
 
 	@Override

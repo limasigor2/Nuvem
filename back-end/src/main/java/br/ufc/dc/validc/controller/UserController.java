@@ -45,10 +45,6 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(service.delete(externalId));
 	}
 
-//	@PatchMapping("/{externalId}")
-//	public ResponseEntity<?> update(@RequestBody User user, @PathVariable("externalId") String externalId) throws EntityNotFoundException{
-//		return ResponseEntity.status(HttpStatus.OK).body(service.update(externalId, user));
-//	}
 
 	@GetMapping("/{username}")
 	@PreAuthorize("authentication.principal.username == #username ||hasRole('ADMIN')")
