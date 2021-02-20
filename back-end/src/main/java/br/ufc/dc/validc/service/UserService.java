@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import br.ufc.dc.validc.exception.EntityNotFoundException;
 import br.ufc.dc.validc.model.Message;
 import br.ufc.dc.validc.model.User;
-import br.ufc.dc.validc.model.requests.UserDto;
+//import br.ufc.dc.validc.model.requests.UserDto;
 import br.ufc.dc.validc.repository.UserRepository;
 
 @Service
@@ -28,13 +28,13 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
-	public List<UserDto> listUser(int page, int size) {
-		List<UserDto> users = new ArrayList<>(size);
-		userRepository.findAll(PageRequest.of(page, size)).forEach(user -> {
-			users.add(new UserDto(user.getName(), user.getUsername(), user.getEmail(), user.getExternalId(),
-					user.getRoles()));
-		});
-		;
+	public List<User> listUser(int page, int size) {
+		List<User> users = userRepository.findAll(PageRequest.of(page, size)).getContent(); //
+		//.forEach(user -> {
+//			users.add(new UserDto(user.getName(), user.getUsername(), user.getEmail(), user.getExternalId(),
+//					user.getRoles()));
+//		});
+		
 
 		return users;
 	}
@@ -58,7 +58,7 @@ public class UserService {
 			user.setName(userToUpdate.getName());
 		if (userToUpdate.getPassword() != null)
 			user.setPassword(encoder.encode(userToUpdate.getPassword()));
-
+		user.setPhonenumbers(userToUpdate.getPhonenumbers());
 		userRepository.save(user);
 
 		return user;

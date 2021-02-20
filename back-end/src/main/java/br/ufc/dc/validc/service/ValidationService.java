@@ -31,14 +31,13 @@ public class ValidationService {
 
 		HashFile hashFile = hashFileService.get(username + "/" + filename).orElseThrow(
 				() -> new EntityNotFoundException("file.not-found", "Arquivo " + filename + " não encontrado"));
-		
-		String hash = hashFileService.generateHash(username, filename);
+
+		String hash = hashFileService.generateHash(username, file.getOriginalFilename());
 		if (hash.equals(hashFile.getHash())) {
 			Validation infoValidation = new Validation(LocalDateTime.now(), motivo, true, filename, username);
 			validationRepository.save(infoValidation);
 			return new Message("Arquivo validado", "file");
 		} else {
-
 			Validation infoValidation = new Validation(LocalDateTime.now(), motivo, false, filename, username);
 			validationRepository.save(infoValidation);
 
@@ -52,16 +51,11 @@ public class ValidationService {
 		List<Validation> infos = validationRepository.list(username, filename);
 		return infos;
 	}
-	
+
 	public void delete(String username, String filename) {
-		System.out.println("DELETE VALIDATION");
-		System.out.println(username + "/" + filename);
 		listValidations(username, filename).forEach(validation -> {
-			System.out.println(validation.getClass());
-			
 			validationRepository.delete(validation);
 		});
 	}
 
 }
-

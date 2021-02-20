@@ -20,7 +20,6 @@ public class HashFileService {
 
 	@Autowired
 	private HashFileRepository repository;
-	
 
 	@Transactional
 	public String save(MultipartFile file, String username, String filename)
@@ -35,12 +34,11 @@ public class HashFileService {
 
 	@Transactional
 	public void delete(String filename, String username) {
-		
+
 		repository.deleteByFilename(username + "/" + filename);
 	}
 
 	public Optional<HashFile> get(String filename) {
-		System.out.println(filename);
 		return repository.findByFilename(filename);
 	}
 
