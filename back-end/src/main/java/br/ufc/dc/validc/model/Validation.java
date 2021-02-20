@@ -1,3 +1,4 @@
+
 package br.ufc.dc.validc.model;
 
 import java.time.LocalDateTime;
