@@ -53,8 +53,8 @@ public class FileController {
 //		File file2 = fileStorageService.multipartToFile(file);
 		googleCloudStorageClient.uploadObject(file, username);
 
-//		String hashValue = hashFileservice.save(file, userName, fileName);
-		return new UploadFileResponse(file.getOriginalFilename(), file.getContentType(), file.getSize(), "hashValue");
+		String hashValue = hashFileservice.save(file, username, file.getOriginalFilename());
+		return new UploadFileResponse(file.getOriginalFilename(), file.getContentType(), file.getSize(), hashValue);
 	}
 
 	@GetMapping("/download/{filename:.+}")

@@ -1,4 +1,9 @@
 runtime: java11
+<<<<<<< HEAD
+instance_class: F2
+env_variables:
+  SPRING_PROFILES_ACTIVE: "prod"
+=======
 instance_class: F4
 env_variables:
   SPRING_PROFILES_ACTIVE: "prod"
@@ -8,3 +13,4 @@ handlers:
   script: auto
   http_headers:
     Access-Control-Allow-Origin: *
+>>>>>>> 1a1c05cff8b99863b9834252745832cfb08ebdf6
