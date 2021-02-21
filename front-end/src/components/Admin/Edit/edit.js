@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, notification, Tooltip} from 'antd';
+import { Form, Input, Button, notification, Tooltip } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
 import history from '../../../utils/history';
@@ -15,10 +15,23 @@ const Edit = () => {
     const onFinish = async (values) => {
         setDisabled(true);
         setLoading(true);
+
+        let phones = [];
+        let phoneNumbers = user.phonenumbers;
+
+        for (let i = 0; i < values.phonenumbers.length; i++) {
+            let id = phoneNumbers[i].id;
+            let aux = values.phonenumbers[i].split(/\(|\) /);
+            let phone = { id: id, ddd: aux[1], number: aux[2] }
+            phones.push(phone)
+        }
+
         const response = await userService.edit({
             ...values,
-            externalId: user.externalId
+            externalId: user.externalId,
+            phonenumbers: phones
         });
+        
         const { data } = response;
         if (response.status === 200) {
             notification['success']({
@@ -143,7 +156,7 @@ const Edit = () => {
                     )}
                 </Form.List>
 
-                <div className="inline" style={{marginTop: 20}}>
+                <div className="inline" style={{ marginTop: 20 }}>
                     <Button type="link" disabled={disabled} onClick={() => history.push("/admin")} className='no-padding-left'>
                         Cancelar
                     </Button>
