@@ -1,0 +1,16 @@
+version: '3.6'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      - DATABASE_HOST=127.0.0.1
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=validc
+      - POSTGRES_INIT=true
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/igor/projetos/pessoal/Nuvem/docker-compose/postgres/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
