@@ -12,18 +12,18 @@ import com.google.cloud.storage.StorageOptions;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class GoogleCloudStorageClient {
 
-	@Value("${cloud.google.project-id}")
-	private String projectId;
+//	@Value("${cloud.google.project-id}")
+	private String projectId = "validc";
 
-	@Value("${cloud.google.bucket-name}")
-	private String bucketName;
+//	@Value("${cloud.google.bucket-name}")
+	private String bucketName = "validc-storage";
 
 	Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
 

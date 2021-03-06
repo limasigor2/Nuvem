@@ -1,0 +1,39 @@
+version: '3.6'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    container_name: postgres
+    environment:
+      - DATABASE_HOST=127.0.0.1
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=validc
+      - POSTGRES_INIT=true
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
+
+  back-end:
+    build: back-end/.
+    container_name: back-end
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/validc.json
+    volumes:
+      - "/home/igor/projetos/pessoal/Nuvem/back-end/src/main/resources/validc-5eb4e6ccdec6.json:/validc.json"
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    command: env
+
+
+  front-end:
+    build: front-end/.
+    container_name: front-end
+    ports:
+      - 5000:5000
+    depends_on:
+      - back-end

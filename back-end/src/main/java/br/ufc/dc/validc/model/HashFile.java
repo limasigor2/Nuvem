@@ -15,7 +15,7 @@ public class HashFile {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
+	@Column(name="filename")
 	private String filename;
 
 	@Column
@@ -57,7 +57,7 @@ public class HashFile {
 
 	@Override
 	public String toString() {
-		return "HashFile [id=" + id + ", fileName=" + filename + ", hash=" + hash + "]";
+		return "HashFile [id=" + id + ", filename=" + filename + ", hash=" + hash + "]";
 	}
 	
 	

@@ -7,7 +7,7 @@ import com.google.cloud.datastore.Query;
 import com.google.cloud.datastore.QueryResults;
 import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 
-import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.cloud.datastore.Datastore;
@@ -20,8 +20,7 @@ import br.ufc.dc.validc.model.Validation;
 @Component
 public class ValidationRepository {
 
-	@Value("${cloud.google.project-id}")
-	private String projectId;
+	private String projectId = "validc";
 
 	Datastore datastore = DatastoreOptions.newBuilder().setProjectId(projectId).build().getService();
 

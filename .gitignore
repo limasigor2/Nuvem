@@ -47,3 +47,6 @@ back-end/src/main/resources/validc.json
 back-end/src/main/resources/validc-327271341f5a.json
 back-end/src/main/resources/*.json
 back-end/src/main/resources/validc-back-5290423a4851.json
+
+docker-compose/front-end/build
+docker-compose/back-end/*.jar

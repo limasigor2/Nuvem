@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>br.ufc.dc</groupId>
 	<artifactId>validc</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 	<name>ValiDC</name>
 	<description>Projeto para a disciplina de Nuvem</description>
